@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/TheNightmareX/hyperpanel/issues"
   },
-  "homepage": "https://github.com/TheNightmareX/hyperpanel#readme"
+  "homepage": "https://github.com/TheNightmareX/hyperpanel#readme",
+  "workspaces": [
+    "packages/api"
+  ]
 }
