@@ -1,0 +1,20 @@
+{
+  "name": "hyperpanel",
+  "version": "0.0.0",
+  "private": true,
+  "description": "",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheNightmareX/hyperpanel.git"
+  },
+  "author": {
+    "name": "Char2s",
+    "email": "Char2s@outlook.com"
+  },
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/TheNightmareX/hyperpanel/issues"
+  },
+  "homepage": "https://github.com/TheNightmareX/hyperpanel#readme"
+}
