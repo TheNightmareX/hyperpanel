@@ -3,6 +3,7 @@ import { Module, NotFoundException } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 
 import { DB_PATH, DEBUG } from './env.constants';
+import { FilesModule } from './files/files.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { DB_PATH, DEBUG } from './env.constants';
       findOneOrFailHandler: () => new NotFoundException(),
       debug: DEBUG,
     }),
+    FilesModule,
   ],
 })
 export class AppModule {}
