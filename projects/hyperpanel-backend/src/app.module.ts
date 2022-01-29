@@ -1,7 +1,7 @@
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module, NotFoundException } from '@nestjs/common';
 
-import { DB_PATH } from './env.constants';
+import { DB_PATH, DEBUG } from './env.constants';
 
 @Module({
   imports: [
@@ -11,6 +11,7 @@ import { DB_PATH } from './env.constants';
       autoLoadEntities: true,
       forceUndefined: true,
       findOneOrFailHandler: () => new NotFoundException(),
+      debug: DEBUG,
     }),
   ],
 })
