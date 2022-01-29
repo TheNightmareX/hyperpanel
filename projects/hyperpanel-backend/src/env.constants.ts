@@ -5,6 +5,7 @@ config();
 
 export const PORT = num('PORT');
 export const DB_PATH = str('DB_PATH');
+export const DEBUG = bool('DEBUG');
 
 function num(name: string) {
   const value = Number(env[name]);
