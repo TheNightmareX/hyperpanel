@@ -3,7 +3,7 @@ import { Field, ObjectType } from '@nestjs/graphql';
 import { FileType } from './file-type.enum';
 
 @ObjectType()
-export class FileStatus {
+export class FileInfo {
   @Field()
   name: string;
 

@@ -4,13 +4,13 @@ import { Stats } from 'fs';
 import { lstat, readdir } from 'fs/promises';
 import { basename, dirname, join } from 'path';
 
-import { FileStatus } from './entities/file-status.entity';
-import { FileStatusList } from './entities/file-status-list.entity';
+import { FileInfo } from './entities/file-info.entity';
+import { FileInfoList } from './entities/file-info-list.entity';
 import { FileType } from './entities/file-type.enum';
 
 @Injectable()
 export class FilesService {
-  async getStatus(path: string): Promise<FileStatus> {
+  async getFileInfo(path: string): Promise<FileInfo> {
     const stats = await lstat(path).catch(() => {
       throw new BadRequestException(`"${path}" must be accessible`);
     });
@@ -24,10 +24,10 @@ export class FilesService {
     };
   }
 
-  async getChildrenStatuses(
+  async getChildrenFileInfo(
     path: string,
     offset: number,
-  ): Promise<FileStatusList> {
+  ): Promise<FileInfoList> {
     const filenames = await readdir(path).catch(() => {
       throw new BadRequestException(`"${path}" must be a accessible directory`);
     });
@@ -35,7 +35,7 @@ export class FilesService {
     const filenamesSliced = filenames.slice(offset, offset + LIMIT);
     const filepaths = filenamesSliced.map((filename) => join(path, filename));
     const items = await Promise.all(
-      filepaths.map((path) => this.getStatus(path)),
+      filepaths.map((path) => this.getFileInfo(path)),
     );
     return {
       offset,
