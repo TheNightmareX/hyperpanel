@@ -9,5 +9,8 @@ export class FileStatus {
   size: number;
 
   @Field()
+  sizeFormatted: string;
+
+  @Field()
   modifiedAt: Date;
 }

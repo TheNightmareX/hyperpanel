@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import fileSize from 'filesize';
 import { lstat } from 'fs/promises';
 import { basename } from 'path';
 
@@ -12,6 +13,7 @@ export class FilesService {
     return {
       name: basename(path),
       size: stats.size,
+      sizeFormatted: fileSize(stats.size),
       modifiedAt: stats.mtime,
     };
   }

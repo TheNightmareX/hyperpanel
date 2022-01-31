@@ -33,6 +33,7 @@
     "@nestjs/platform-express": "^8.0.0",
     "apollo-server-express": "^3.6.2",
     "dotenv": "^14.2.0",
+    "filesize": "^8.0.7",
     "graphql": "^15.8.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
