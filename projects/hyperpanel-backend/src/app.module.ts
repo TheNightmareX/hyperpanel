@@ -8,6 +8,9 @@ import { FilesModule } from './files/files.module';
 @Module({
   imports: [
     GraphQLModule.forRoot({
+      buildSchemaOptions: {
+        numberScalarMode: 'integer',
+      },
       autoSchemaFile: true,
       debug: DEBUG,
       playground: DEBUG,
