@@ -8,6 +8,9 @@ export class FileStatus {
   name: string;
 
   @Field()
+  dirname: string;
+
+  @Field()
   type: FileType;
 
   @Field()

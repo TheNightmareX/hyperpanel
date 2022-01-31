@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import fileSize from 'filesize';
 import { Stats } from 'fs';
 import { lstat, readdir } from 'fs/promises';
-import { basename, join } from 'path';
+import { basename, dirname, join } from 'path';
 
 import { FileStatus } from './entities/file-status.entity';
 import { FileStatusList } from './entities/file-status-list.entity';
@@ -16,6 +16,7 @@ export class FilesService {
     });
     return {
       name: basename(path),
+      dirname: dirname(path),
       type: this.getFileType(stats),
       size: stats.size,
       sizeFormatted: fileSize(stats.size),
