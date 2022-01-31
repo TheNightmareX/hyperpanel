@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import fileSize from 'filesize';
 import { Stats } from 'fs';
-import { lstat, readdir } from 'fs/promises';
+import { lstat, readdir, realpath } from 'fs/promises';
 import { basename, dirname, join } from 'path';
 
 import { FileInfo } from './entities/file-info.entity';
@@ -14,7 +14,7 @@ export class FilesService {
     const stats = await lstat(path).catch(() => {
       throw new BadRequestException(`"${path}" must be accessible`);
     });
-    return {
+    const info: FileInfo = {
       name: basename(path),
       dirname: dirname(path),
       type: this.getFileType(stats),
@@ -22,6 +22,8 @@ export class FilesService {
       sizeFormatted: fileSize(stats.size),
       modifiedAt: stats.mtime,
     };
+    if (info.type == FileType.Symlink) info.extension = await realpath(path);
+    return info;
   }
 
   async getChildrenFileInfo(

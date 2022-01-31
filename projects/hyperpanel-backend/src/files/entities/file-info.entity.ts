@@ -21,4 +21,7 @@ export class FileInfo {
 
   @Field()
   modifiedAt: Date;
+
+  @Field({ nullable: true })
+  extension?: string;
 }
