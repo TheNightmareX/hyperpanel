@@ -1,4 +1,3 @@
-import { DefaultValuePipe } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 
 import { FileInfo } from './entities/file-info.entity';
@@ -17,8 +16,8 @@ export class FilesResolver {
   @Query(() => FileInfoList)
   async fileInfoList(
     @Args('path') path: string,
-    @Args('offset', { nullable: true }, new DefaultValuePipe(0)) offset: number,
+    @Args('offset', { nullable: true }) offset?: number,
   ): Promise<FileInfoList> {
-    return this.filesService.getChildrenFileInfo(path, offset);
+    return this.filesService.getChildrenFileInfo(path, offset ?? 0);
   }
 }
