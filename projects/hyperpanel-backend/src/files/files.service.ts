@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import fileSize from 'filesize';
+import formatSize from 'filesize';
 import { Stats } from 'fs';
 import { lstat, readdir, realpath } from 'fs/promises';
 import { basename, dirname, join } from 'path';
@@ -19,7 +19,7 @@ export class FilesService {
       dirname: dirname(path),
       type: this.getFileType(stats),
       size: stats.size,
-      sizeFormatted: fileSize(stats.size),
+      sizeFormatted: this.formatSize(stats.size),
       modifiedAt: stats.mtime,
     };
     if (info.type == FileType.Symlink) info.extension = await realpath(path);
@@ -56,5 +56,9 @@ export class FilesService {
       : stats.isSocket()
       ? FileType.Socket
       : FileType.Other;
+  }
+
+  private formatSize(size: number): string {
+    return formatSize(size, { base: 2, standard: 'jedec' });
   }
 }
