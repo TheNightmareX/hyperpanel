@@ -1,4 +1,4 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, Float, ObjectType } from '@nestjs/graphql';
 
 import { FileType } from './file-type.enum';
 
@@ -13,7 +13,7 @@ export class FileInfo {
   @Field()
   type: FileType;
 
-  @Field()
+  @Field(() => Float) // big int
   size: number;
 
   @Field()
