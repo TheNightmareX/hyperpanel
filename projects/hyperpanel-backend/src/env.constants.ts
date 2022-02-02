@@ -4,6 +4,9 @@ import { env } from 'process';
 config();
 
 export const PORT = num('PORT');
+export const AUTH_SECRET = str('AUTH_SECRET');
+export const AUTH_USERNAME = str('AUTH_USERNAME');
+export const AUTH_PASSWORD = str('AUTH_PASSWORD');
 export const DB_PATH = str('DB_PATH');
 export const DEBUG = bool('DEBUG');
 

@@ -24,8 +24,8 @@ import { FilesModule } from './files/files.module';
       findOneOrFailHandler: () => new NotFoundException(),
       debug: DEBUG,
     }),
-    FilesModule,
     AuthModule,
+    FilesModule,
   ],
 })
 export class AppModule {}
