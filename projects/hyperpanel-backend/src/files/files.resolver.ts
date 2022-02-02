@@ -9,8 +9,11 @@ export class FilesResolver {
   constructor(private readonly filesService: FilesService) {}
 
   @Query(() => FileInfo)
-  async fileInfoDetail(@Args('path') path: string): Promise<FileInfo> {
-    return this.filesService.getFileInfo(path);
+  async fileInfoDetail(
+    @Args('path') path: string,
+    @Args('accurate', { nullable: true }) accurate?: boolean,
+  ): Promise<FileInfo> {
+    return this.filesService.getFileInfo(path, accurate ?? false);
   }
 
   @Query(() => FileInfoList)
