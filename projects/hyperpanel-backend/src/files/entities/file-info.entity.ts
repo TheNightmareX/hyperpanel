@@ -23,5 +23,5 @@ export class FileInfo {
   modifiedAt: Date;
 
   @Field({ nullable: true })
-  extension?: string;
+  realpath?: string;
 }

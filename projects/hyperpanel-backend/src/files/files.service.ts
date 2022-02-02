@@ -28,7 +28,7 @@ export class FilesService {
       info.sizeFormatted = this.formatSize(info.size);
     }
     if (info.type == FileType.Symlink) {
-      info.extension = await realpath(path);
+      info.realpath = await realpath(path);
     }
 
     return info;
