@@ -2,6 +2,7 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module, NotFoundException } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 
+import { AuthModule } from './auth/auth.module';
 import { DB_PATH, DEBUG } from './env.constants';
 import { FilesModule } from './files/files.module';
 
@@ -24,6 +25,7 @@ import { FilesModule } from './files/files.module';
       debug: DEBUG,
     }),
     FilesModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
