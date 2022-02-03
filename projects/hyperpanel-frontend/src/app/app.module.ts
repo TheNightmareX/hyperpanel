@@ -11,6 +11,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { GraphQLModule } from './graphql.module';
 
 registerLocaleData(en);
 
@@ -22,6 +23,7 @@ registerLocaleData(en);
     FormsModule,
     HttpClientModule,
     NzIconModule.forRoot([]),
+    GraphQLModule,
     AppRoutingModule,
   ],
   providers: [{ provide: NZ_I18N, useValue: en_US }],
