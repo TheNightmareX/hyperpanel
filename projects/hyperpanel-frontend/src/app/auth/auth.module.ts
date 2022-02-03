@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { IconDefinition } from '@ant-design/icons-angular';
 import { LockOutline, UserOutline } from '@ant-design/icons-angular/icons';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -20,6 +21,7 @@ const icons: IconDefinition[] = [UserOutline, LockOutline];
   declarations: [AuthComponent],
   imports: [
     CommonModule,
+    FormsModule,
     AuthRoutingModule,
     NzIconModule.forChild(icons),
     NzLayoutModule,
