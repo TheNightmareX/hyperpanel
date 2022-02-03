@@ -10,6 +10,7 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
+import { NzMessageModule } from 'ng-zorro-antd/message';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 
 import { AuthComponent } from './auth.component';
@@ -24,6 +25,7 @@ const icons: IconDefinition[] = [UserOutline, LockOutline];
     FormsModule,
     AuthRoutingModule,
     NzIconModule.forChild(icons),
+    NzMessageModule,
     NzLayoutModule,
     NzTypographyModule,
     NzCardModule,
