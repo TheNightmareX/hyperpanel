@@ -22,9 +22,9 @@ export class AuthComponent implements OnInit {
   ngOnInit(): void {}
 
   async login(username: string, password: string): Promise<void> {
-    this.authorizationGql.fetch({ username, password }).subscribe(
-      () => this.messageService.success('Login succeeded'),
-      () => this.messageService.error('Login failed'),
-    );
+    this.authorizationGql.fetch({ username, password }).subscribe({
+      next: () => this.messageService.success('Login succeeded'),
+      error: () => this.messageService.error('Login failed'),
+    });
   }
 }
