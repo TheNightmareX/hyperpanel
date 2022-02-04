@@ -1,52 +1,46 @@
-<div class="container">
-  <nz-card>
-    <form
-      nz-form
-      (ngSubmit)="login(data.username, data.password)"
-      #form="ngForm"
+<nz-card class="container" nzBorderless>
+  <form nz-form (ngSubmit)="login(data.username, data.password)" #form="ngForm">
+    <h4 nz-typography>HyperPanel</h4>
+    <nz-divider></nz-divider>
+    <nz-form-item>
+      <nz-form-control>
+        <nz-input-group nzPrefixIcon="user" nzSize="large">
+          <input
+            nz-input
+            name="username"
+            type="text"
+            placeholder="Username"
+            autocomplete="username"
+            required
+            [(ngModel)]="data.username"
+          />
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control>
+        <nz-input-group nzPrefixIcon="lock" nzSize="large">
+          <input
+            nz-input
+            name="password"
+            type="password"
+            placeholder="Password"
+            autocomplete="current-password"
+            required
+            [(ngModel)]="data.password"
+          />
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+    <button
+      nz-button
+      nzType="primary"
+      nzSize="large"
+      type="submit"
+      nzBlock
+      [disabled]="form.invalid"
     >
-      <h4 nz-typography>HyperPanel - Login</h4>
-      <nz-divider></nz-divider>
-      <nz-form-item>
-        <nz-form-control>
-          <nz-input-group nzPrefixIcon="user" nzSize="large">
-            <input
-              nz-input
-              name="username"
-              type="text"
-              placeholder="Username"
-              autocomplete="username"
-              required
-              [(ngModel)]="data.username"
-            />
-          </nz-input-group>
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-control>
-          <nz-input-group nzPrefixIcon="lock" nzSize="large">
-            <input
-              nz-input
-              name="password"
-              type="password"
-              placeholder="Password"
-              autocomplete="current-password"
-              required
-              [(ngModel)]="data.password"
-            />
-          </nz-input-group>
-        </nz-form-control>
-      </nz-form-item>
-      <button
-        nz-button
-        nzType="primary"
-        nzSize="large"
-        type="submit"
-        nzBlock
-        [disabled]="form.invalid"
-      >
-        Login
-      </button>
-    </form>
-  </nz-card>
-</div>
+      Login
+    </button>
+  </form>
+</nz-card>
