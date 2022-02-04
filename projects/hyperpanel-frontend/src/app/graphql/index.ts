@@ -41,16 +41,20 @@ export type FileInfoList = {
   total: Scalars['Int'];
 };
 
-export type Query = {
-  __typename?: 'Query';
-  authorization: Scalars['String'];
-  fileInfoDetail: FileInfo;
-  fileInfoList: FileInfoList;
+export type Mutation = {
+  __typename?: 'Mutation';
+  authorize: Scalars['String'];
 };
 
-export type QueryAuthorizationArgs = {
+export type MutationAuthorizeArgs = {
   password: Scalars['String'];
   username: Scalars['String'];
+};
+
+export type Query = {
+  __typename?: 'Query';
+  fileInfoDetail: FileInfo;
+  fileInfoList: FileInfoList;
 };
 
 export type QueryFileInfoDetailArgs = {
@@ -63,30 +67,27 @@ export type QueryFileInfoListArgs = {
   path: Scalars['String'];
 };
 
-export type AuthorizationQueryVariables = Exact<{
+export type AuthorizeMutationVariables = Exact<{
   username: Scalars['String'];
   password: Scalars['String'];
 }>;
 
-export type AuthorizationQuery = {
-  __typename?: 'Query';
-  authorization: string;
-};
+export type AuthorizeMutation = { __typename?: 'Mutation'; authorize: string };
 
-export const AuthorizationDocument = gql`
-  query Authorization($username: String!, $password: String!) {
-    authorization(username: $username, password: $password)
+export const AuthorizeDocument = gql`
+  mutation Authorize($username: String!, $password: String!) {
+    authorize(username: $username, password: $password)
   }
 `;
 
 @Injectable({
   providedIn: 'root',
 })
-export class AuthorizationGQL extends Apollo.Query<
-  AuthorizationQuery,
-  AuthorizationQueryVariables
+export class AuthorizeGQL extends Apollo.Mutation<
+  AuthorizeMutation,
+  AuthorizeMutationVariables
 > {
-  document = AuthorizationDocument;
+  document = AuthorizeDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

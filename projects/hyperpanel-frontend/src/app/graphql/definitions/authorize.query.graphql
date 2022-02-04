@@ -1,0 +1,3 @@
+mutation Authorize($username: String!, $password: String!) {
+  authorize(username: $username, password: $password)
+}

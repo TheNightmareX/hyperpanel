@@ -1,3 +1,0 @@
-query Authorization($username: String!, $password: String!) {
-  authorization(username: $username, password: $password)
-}
