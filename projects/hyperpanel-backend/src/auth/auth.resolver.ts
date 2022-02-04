@@ -1,4 +1,4 @@
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Resolver } from '@nestjs/graphql';
 
 import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
@@ -8,8 +8,8 @@ export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
 
   @AuthGuard.skip(true)
-  @Query(() => String)
-  async authorization(
+  @Mutation(() => String)
+  async authorize(
     @Args('username') username: string,
     @Args('password') password: string,
   ): Promise<string> {
