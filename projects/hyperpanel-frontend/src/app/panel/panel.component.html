@@ -4,7 +4,14 @@
   </nz-header>
   <nz-layout>
     <nz-sider>
-      <ul nz-menu nzMode="inline"></ul>
+      <ul nz-menu nzMode="inline">
+        <li nz-menu-item nzMatchRouter>
+          <a [routerLink]="['files']">
+            <i nz-icon nzType="file"></i>
+            <span>Files</span>
+          </a>
+        </li>
+      </ul>
     </nz-sider>
     <nz-content>
       <router-outlet></router-outlet>
