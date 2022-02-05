@@ -53,6 +53,7 @@ export type MutationAuthorizeArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  authorized: Scalars['Boolean'];
   fileInfoDetail: FileInfo;
   fileInfoList: FileInfoList;
 };
