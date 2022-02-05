@@ -42,6 +42,7 @@ export class AuthComponent implements OnInit {
         },
         error: () => {
           this.messageService.error('Login failed');
+          this.data.password = '';
         },
       });
   }
