@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { finalize } from 'rxjs';
 
 import { AuthService } from './auth.service';
 
@@ -15,6 +16,8 @@ export class AuthComponent implements OnInit {
     password: '',
   };
 
+  loading = false;
+
   constructor(
     private router: Router,
     private messageService: NzMessageService,
@@ -26,14 +29,20 @@ export class AuthComponent implements OnInit {
   }
 
   async login(username: string, password: string): Promise<void> {
-    this.authService.login(username, password).subscribe({
-      next: () => {
-        this.messageService.success('Login succeeded');
-        this.router.navigate(['/panel']);
-      },
-      error: () => {
-        this.messageService.error('Login failed');
-      },
-    });
+    if (this.loading) return;
+
+    this.loading = true;
+    this.authService
+      .login(username, password)
+      .pipe(finalize(() => (this.loading = false)))
+      .subscribe({
+        next: () => {
+          this.messageService.success('Login succeeded');
+          this.router.navigate(['/panel']);
+        },
+        error: () => {
+          this.messageService.error('Login failed');
+        },
+      });
   }
 }
