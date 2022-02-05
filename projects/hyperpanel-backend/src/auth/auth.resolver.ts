@@ -1,4 +1,4 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
@@ -14,5 +14,10 @@ export class AuthResolver {
     @Args('password') password: string,
   ): Promise<string> {
     return this.authService.authorize(username, password);
+  }
+
+  @Query(() => Boolean)
+  async authorized(): Promise<boolean> {
+    return true;
   }
 }
