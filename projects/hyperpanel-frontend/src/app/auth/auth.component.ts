@@ -21,7 +21,9 @@ export class AuthComponent implements OnInit {
     private authService: AuthService,
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.authService.logout().subscribe();
+  }
 
   async login(username: string, password: string): Promise<void> {
     this.authService.login(username, password).subscribe({
