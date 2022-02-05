@@ -1,1 +1,13 @@
-<p>panel works!</p>
+<nz-layout class="container">
+  <nz-header>
+    <div class="logo">HyperPanel</div>
+  </nz-header>
+  <nz-layout>
+    <nz-sider>
+      <ul nz-menu nzMode="inline"></ul>
+    </nz-sider>
+    <nz-content>
+      <router-outlet></router-outlet>
+    </nz-content>
+  </nz-layout>
+</nz-layout>
