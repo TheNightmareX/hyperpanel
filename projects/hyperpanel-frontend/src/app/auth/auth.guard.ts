@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanLoad, UrlTree } from '@angular/router';
+import { CanLoad, Router, UrlTree } from '@angular/router';
 import { catchError, map, Observable, of } from 'rxjs';
 
 import { AuthorizedGQL } from '../graphql';
@@ -8,7 +8,7 @@ import { AuthorizedGQL } from '../graphql';
   providedIn: 'root',
 })
 export class AuthGuard implements CanLoad {
-  constructor(private authorizedGql: AuthorizedGQL) {}
+  constructor(private router: Router, private authorizedGql: AuthorizedGQL) {}
 
   canLoad():
     | Observable<boolean | UrlTree>
@@ -17,7 +17,7 @@ export class AuthGuard implements CanLoad {
     | UrlTree {
     return this.authorizedGql.fetch().pipe(
       map((result) => result.data.authorized),
-      catchError(() => of(false)),
+      catchError(() => of(this.router.createUrlTree(['/auth']))),
     );
   }
 }
