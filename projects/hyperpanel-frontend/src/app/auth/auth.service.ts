@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { filter, map, Observable, tap } from 'rxjs';
+import { Apollo } from 'apollo-angular';
+import { filter, from, map, Observable, tap } from 'rxjs';
 
 import { LocalStorageItem } from '../common/local-storage-item.class';
 import { AuthorizeGQL } from '../graphql';
@@ -14,13 +15,20 @@ export class AuthService {
     null,
   );
 
-  constructor(private authorizeGql: AuthorizeGQL) {}
+  constructor(private apollo: Apollo, private authorizeGql: AuthorizeGQL) {}
 
   login(username: string, password: string): Observable<string> {
     return this.authorizeGql.mutate({ username, password }).pipe(
       map((result) => result.data?.authorize),
       filter((token): token is string => !!token),
       tap((token) => this.token.next(token).save()),
+    );
+  }
+
+  logout(): Observable<void> {
+    return from(this.apollo.client.clearStore()).pipe(
+      map(() => {}),
+      tap(() => this.token.next(null).save()),
     );
   }
 }
