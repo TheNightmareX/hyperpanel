@@ -75,6 +75,10 @@ export type AuthorizeMutationVariables = Exact<{
 
 export type AuthorizeMutation = { __typename?: 'Mutation'; authorize: string };
 
+export type AuthorizedQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AuthorizedQuery = { __typename?: 'Query'; authorized: boolean };
+
 export const AuthorizeDocument = gql`
   mutation Authorize($username: String!, $password: String!) {
     authorize(username: $username, password: $password)
@@ -89,6 +93,25 @@ export class AuthorizeGQL extends Apollo.Mutation<
   AuthorizeMutationVariables
 > {
   document = AuthorizeDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const AuthorizedDocument = gql`
+  query Authorized {
+    authorized
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AuthorizedGQL extends Apollo.Query<
+  AuthorizedQuery,
+  AuthorizedQueryVariables
+> {
+  document = AuthorizedDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
