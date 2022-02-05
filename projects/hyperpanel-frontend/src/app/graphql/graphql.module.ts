@@ -5,6 +5,7 @@ import { APOLLO_OPTIONS, ApolloModule } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { environment } from 'src/environments/environment';
 
+import { GraphqlAuthInterceptor } from './graphql-auth.interceptor';
 import { GraphqlDeferrerInterceptor } from './graphql-deferrer.interceptor';
 
 export function createApollo(httpLink: HttpLink): ApolloClientOptions<any> {
@@ -21,6 +22,11 @@ export function createApollo(httpLink: HttpLink): ApolloClientOptions<any> {
       provide: APOLLO_OPTIONS,
       useFactory: createApollo,
       deps: [HttpLink],
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: GraphqlAuthInterceptor,
+      multi: true,
     },
     {
       provide: HTTP_INTERCEPTORS,
