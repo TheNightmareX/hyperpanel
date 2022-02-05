@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
-import { AuthorizeGQL } from '../graphql';
+import { AuthService } from './auth.service';
 
 @Component({
   selector: 'app-auth',
@@ -16,13 +16,13 @@ export class AuthComponent implements OnInit {
 
   constructor(
     private messageService: NzMessageService,
-    private authorizeGql: AuthorizeGQL,
+    private authService: AuthService,
   ) {}
 
   ngOnInit(): void {}
 
   async login(username: string, password: string): Promise<void> {
-    this.authorizeGql.mutate({ username, password }).subscribe({
+    this.authService.login(username, password).subscribe({
       next: () => this.messageService.success('Login succeeded'),
       error: () => this.messageService.error('Login failed'),
     });
