@@ -3,7 +3,7 @@
     <div class="logo">HyperPanel</div>
   </nz-header>
   <nz-layout>
-    <nz-sider nzCollapsible nzBreakpoint="xl">
+    <nz-sider nzCollapsible [nzCollapsedWidth]="60" nzBreakpoint="xl">
       <ul nz-menu nzMode="inline">
         <li nz-menu-item nzMatchRouter>
           <a [routerLink]="['files']">
