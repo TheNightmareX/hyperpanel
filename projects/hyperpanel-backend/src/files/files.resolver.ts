@@ -27,6 +27,14 @@ export class FilesResolver {
     return this.filesService.getChildrenFileInfo(path, offset ?? 0);
   }
 
+  @Mutation(() => String)
+  async moveFile(
+    @Args('sourcePath') sourcePath: string,
+    @Args('targetPath') targetPath: string,
+  ): Promise<string> {
+    return this.filesService.moveFile(sourcePath, targetPath);
+  }
+
   @Mutation(() => [String])
   async moveFiles(
     @Args('sourcePaths', { type: () => [String] }) sourcePaths: string[],
