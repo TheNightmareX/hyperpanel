@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import formatSize from 'filesize';
 import { Stats } from 'fs';
 import { readdir, realpath, stat } from 'fs/promises';
@@ -11,9 +11,7 @@ import { FileType } from './entities/file-type.enum';
 @Injectable()
 export class FilesService {
   async getFileInfo(path: string, accurate: boolean): Promise<FileInfo> {
-    const stats = await stat(path).catch(() => {
-      throw new BadRequestException(`"${path}" must be accessible`);
-    });
+    const stats = await stat(path);
 
     const info: FileInfo = {
       name: basename(path),
@@ -37,9 +35,7 @@ export class FilesService {
     path: string,
     offset: number,
   ): Promise<FileInfoList> {
-    const filenames = await readdir(path).catch(() => {
-      throw new BadRequestException(`"${path}" must be a accessible directory`);
-    });
+    const filenames = await readdir(path);
     const LIMIT = 50;
     const filenamesSliced = filenames.slice(offset, offset + LIMIT);
     const filepaths = filenamesSliced.map((filename) => join(path, filename));

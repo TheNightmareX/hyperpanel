@@ -1,9 +1,12 @@
+import { UseFilters } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 
 import { FileInfo } from './entities/file-info.entity';
 import { FileInfoList } from './entities/file-info-list.entity';
 import { FilesService } from './files.service';
+import { FilesErrorFilter } from './files-error.filter';
 
+@UseFilters(FilesErrorFilter)
 @Resolver()
 export class FilesResolver {
   constructor(private readonly filesService: FilesService) {}
