@@ -28,11 +28,11 @@ export class FilesResolver {
   }
 
   @Mutation(() => String)
-  async moveFile(
-    @Args('sourcePath') sourcePath: string,
-    @Args('targetPath') targetPath: string,
+  async renameFile(
+    @Args('path') path: string,
+    @Args('newName') newName: string,
   ): Promise<string> {
-    return this.filesService.moveFile(sourcePath, targetPath);
+    return this.filesService.renameFile(path, newName);
   }
 
   @Mutation(() => [String])

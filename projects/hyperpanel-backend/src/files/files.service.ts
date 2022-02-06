@@ -51,9 +51,11 @@ export class FilesService {
     };
   }
 
-  async moveFile(sourcePath: string, targetPath: string): Promise<string> {
-    await fs.rename(sourcePath, targetPath);
-    return targetPath;
+  async renameFile(path: string, newName: string): Promise<string> {
+    const dirPath = pathLib.dirname(path);
+    const newPath = pathLib.join(dirPath, newName);
+    await fs.rename(path, newPath);
+    return newPath;
   }
 
   async moveFiles(
