@@ -15,7 +15,7 @@ function isFileError(error: Error): error is FileError {
 }
 
 @Catch(Error)
-export class FileErrorFilter<T extends Error | FileError>
+export class FilesErrorFilter<T extends Error | FileError>
   implements ExceptionFilter<T>
 {
   catch(exception: T): void {
