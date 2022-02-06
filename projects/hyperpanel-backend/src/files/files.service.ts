@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import formatSize from 'filesize';
 import { Stats } from 'fs';
-import { lstat, readdir, realpath } from 'fs/promises';
+import { readdir, realpath, stat } from 'fs/promises';
 import { basename, dirname, join } from 'path';
 
 import { FileInfo } from './entities/file-info.entity';
@@ -11,9 +11,10 @@ import { FileType } from './entities/file-type.enum';
 @Injectable()
 export class FilesService {
   async getFileInfo(path: string, accurate: boolean): Promise<FileInfo> {
-    const stats = await lstat(path).catch(() => {
+    const stats = await stat(path).catch(() => {
       throw new BadRequestException(`"${path}" must be accessible`);
     });
+
     const info: FileInfo = {
       name: basename(path),
       dirname: dirname(path),
@@ -21,14 +22,12 @@ export class FilesService {
       size: stats.size,
       sizeFormatted: this.formatSize(stats.size),
       modifiedAt: stats.mtime,
+      realpath: await this.getRealpath(path),
     };
 
     if (info.type == FileType.Directory && accurate) {
       info.size = await this.getDirectorySize(path);
       info.sizeFormatted = this.formatSize(info.size);
-    }
-    if (info.type == FileType.Symlink) {
-      info.realpath = await realpath(path);
     }
 
     return info;
@@ -59,8 +58,6 @@ export class FilesService {
       ? FileType.File
       : stats.isDirectory()
       ? FileType.Directory
-      : stats.isSymbolicLink()
-      ? FileType.Symlink
       : stats.isSocket()
       ? FileType.Socket
       : FileType.Other;
@@ -73,7 +70,7 @@ export class FilesService {
     await Promise.all(
       paths.map(async (path) => {
         try {
-          const stats = await lstat(path);
+          const stats = await stat(path);
           const size = stats.isFile()
             ? stats.size
             : stats.isDirectory()
@@ -84,6 +81,11 @@ export class FilesService {
       }),
     );
     return total;
+  }
+
+  private async getRealpath(path: string): Promise<string | null> {
+    const result = await realpath(path);
+    return result == path ? null : result;
   }
 
   private formatSize(size: number): string {
