@@ -1,5 +1,5 @@
 import { UseFilters } from '@nestjs/common';
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { FileInfo } from './entities/file-info.entity';
 import { FileInfoList } from './entities/file-info-list.entity';
@@ -25,5 +25,13 @@ export class FilesResolver {
     @Args('offset', { nullable: true }) offset?: number,
   ): Promise<FileInfoList> {
     return this.filesService.getChildrenFileInfo(path, offset ?? 0);
+  }
+
+  @Mutation(() => [String])
+  async moveFiles(
+    @Args('sourcePaths', { type: () => [String] }) sourcePaths: string[],
+    @Args('targetDirPath') targetDirPath: string,
+  ): Promise<string[]> {
+    return this.filesService.moveFiles(sourcePaths, targetDirPath);
   }
 }

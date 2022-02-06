@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import formatSize from 'filesize';
 import { Stats } from 'fs';
-import { readdir, realpath, stat } from 'fs/promises';
+import { readdir, realpath, rename, stat } from 'fs/promises';
 import { basename, dirname, join } from 'path';
 
 import { FileInfo } from './entities/file-info.entity';
@@ -47,6 +47,20 @@ export class FilesService {
       total: filenames.length,
       items,
     };
+  }
+
+  async moveFiles(
+    sourcePaths: string[],
+    targetDirPath: string,
+  ): Promise<string[]> {
+    const tasks = sourcePaths.map(async (sourcePath) => {
+      const filename = basename(sourcePath);
+      const targetPath = join(targetDirPath, filename);
+      await rename(sourcePath, targetPath);
+      return targetPath;
+    });
+    const resultPaths = await Promise.all(tasks);
+    return resultPaths;
   }
 
   private getFileType(stats: Stats): FileType {
