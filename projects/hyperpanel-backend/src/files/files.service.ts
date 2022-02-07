@@ -52,6 +52,12 @@ export class FilesService {
     };
   }
 
+  async createDirectory(path: string): Promise<string> {
+    path = await this.getNonConflictingPath(path);
+    await fsPromises.mkdir(path, { recursive: true });
+    return path;
+  }
+
   async renameFile(path: string, newName: string): Promise<string> {
     const dirPath = pathLib.dirname(path);
     const newPathCrude = pathLib.join(dirPath, newName);

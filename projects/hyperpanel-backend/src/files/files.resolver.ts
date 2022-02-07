@@ -28,6 +28,11 @@ export class FilesResolver {
   }
 
   @Mutation(() => String)
+  async createDirectory(@Args('path') path: string): Promise<string> {
+    return this.filesService.createDirectory(path);
+  }
+
+  @Mutation(() => String)
   async renameFile(
     @Args('path') path: string,
     @Args('newName') newName: string,
