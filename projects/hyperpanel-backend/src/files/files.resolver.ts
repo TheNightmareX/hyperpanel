@@ -27,18 +27,14 @@ export class FilesResolver {
     return this.filesService.getChildrenFileInfo(path, offset ?? 0, 50);
   }
 
-  @Mutation(() => [FileInfo])
-  async createFiles(
-    @Args('paths', { type: () => [String] }) paths: string[],
-  ): Promise<FileInfo[]> {
-    return this.filesService.createFiles(paths);
+  @Mutation(() => FileInfo)
+  async createFile(@Args('path') path: string): Promise<FileInfo> {
+    return this.filesService.createFile(path);
   }
 
-  @Mutation(() => [FileInfo])
-  async createDirectories(
-    @Args('paths', { type: () => [String] }) paths: string[],
-  ): Promise<FileInfo[]> {
-    return this.filesService.createDirectories(paths);
+  @Mutation(() => FileInfo)
+  async createDirectory(@Args('path') path: string): Promise<FileInfo> {
+    return this.filesService.createDirectory(path);
   }
 
   @Mutation(() => FileInfo)

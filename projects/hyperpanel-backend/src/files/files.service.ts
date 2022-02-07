@@ -49,24 +49,18 @@ export class FilesService {
     return { offset, total: filenames.length, items };
   }
 
-  async createFiles(paths: string[]): Promise<FileInfo[]> {
-    const tasks = paths.map(async (pathCrude) => {
-      const path = await this.getNonConflictingPath(pathCrude);
-      const dirPath = pathLib.dirname(path);
-      await fsPromises.mkdir(dirPath, { recursive: true });
-      await fsPromises.writeFile(path, '');
-      return this.getFileInfo(path, false);
-    });
-    return Promise.all(tasks);
+  async createFile(path: string): Promise<FileInfo> {
+    path = await this.getNonConflictingPath(path);
+    const dirPath = pathLib.dirname(path);
+    await fsPromises.mkdir(dirPath, { recursive: true });
+    await fsPromises.writeFile(path, '');
+    return this.getFileInfo(path, false);
   }
 
-  async createDirectories(paths: string[]): Promise<FileInfo[]> {
-    const tasks = paths.map(async (pathCrude) => {
-      const path = await this.getNonConflictingPath(pathCrude);
-      await fsPromises.mkdir(path, { recursive: true });
-      return this.getFileInfo(path, false);
-    });
-    return Promise.all(tasks);
+  async createDirectory(path: string): Promise<FileInfo> {
+    path = await this.getNonConflictingPath(path);
+    await fsPromises.mkdir(path, { recursive: true });
+    return this.getFileInfo(path, false);
   }
 
   async renameFile(path: string, newName: string): Promise<FileInfo> {
