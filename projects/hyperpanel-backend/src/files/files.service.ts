@@ -75,6 +75,21 @@ export class FilesService {
     return resultPaths;
   }
 
+  async copyFiles(
+    sourcePaths: string[],
+    targetDirPath: string,
+  ): Promise<string[]> {
+    const tasks = sourcePaths.map(async (sourcePath) => {
+      const filename = pathLib.basename(sourcePath);
+      const targetPathCrude = pathLib.join(targetDirPath, filename);
+      const targetPath = await this.getNonConflictingPath(targetPathCrude);
+      await fsPromises.copyFile(sourcePath, targetPath);
+      return targetPath;
+    });
+    const resultPaths = await Promise.all(tasks);
+    return resultPaths;
+  }
+
   private getFileType(stats: fs.Stats): FileType {
     return stats.isFile()
       ? FileType.File

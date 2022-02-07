@@ -42,4 +42,12 @@ export class FilesResolver {
   ): Promise<string[]> {
     return this.filesService.moveFiles(sourcePaths, targetDirPath);
   }
+
+  @Mutation(() => [String])
+  async copyFiles(
+    @Args('sourcePaths', { type: () => [String] }) sourcePaths: string[],
+    @Args('targetDirPath') targetDirPath: string,
+  ): Promise<string[]> {
+    return this.filesService.copyFiles(sourcePaths, targetDirPath);
+  }
 }
