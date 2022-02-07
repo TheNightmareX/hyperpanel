@@ -53,7 +53,8 @@ export class FilesService {
 
   async renameFile(path: string, newName: string): Promise<string> {
     const dirPath = pathLib.dirname(path);
-    const newPath = pathLib.join(dirPath, newName);
+    const newPathCrude = pathLib.join(dirPath, newName);
+    const newPath = await this.getNonConflictingPath(newPathCrude);
     await fsPromises.rename(path, newPath);
     return newPath;
   }
@@ -64,7 +65,8 @@ export class FilesService {
   ): Promise<string[]> {
     const tasks = sourcePaths.map(async (sourcePath) => {
       const filename = pathLib.basename(sourcePath);
-      const targetPath = pathLib.join(targetDirPath, filename);
+      const targetPathCrude = pathLib.join(targetDirPath, filename);
+      const targetPath = await this.getNonConflictingPath(targetPathCrude);
       await fsPromises.rename(sourcePath, targetPath);
       return targetPath;
     });
@@ -105,6 +107,22 @@ export class FilesService {
   private async getRealpath(path: string): Promise<string | null> {
     const result = await fsPromises.realpath(path);
     return result == path ? null : result;
+  }
+
+  private async getNonConflictingPath(path: string): Promise<string> {
+    if (!(await this.existsPath(path))) return path;
+    const dirname = pathLib.dirname(path);
+    const extname = pathLib.extname(path);
+    const filename = pathLib.basename(path, extname);
+    const pathNew = pathLib.join(dirname, `${filename}_${extname}`);
+    return this.getNonConflictingPath(pathNew);
+  }
+
+  private async existsPath(path: string): Promise<boolean> {
+    return fsPromises
+      .stat(path)
+      .then(() => true)
+      .catch(() => false);
   }
 
   private formatSize(size: number): string {
