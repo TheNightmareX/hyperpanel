@@ -12,6 +12,7 @@ enum FileErrorCode {
   ENOENT = 'ENOENT',
   EACCES = 'EACCES',
   ENOTDIR = 'ENOTDIR',
+  EISDIR = 'EISDIR',
 }
 
 function isFileError(error: Error): error is FileError {
@@ -32,5 +33,9 @@ export class FilesErrorFilter<T extends Error | FileError>
       throw new BadRequestException(`"${exception.path}" must exist`);
     if (exception.code == FileErrorCode.ENOTDIR)
       throw new BadRequestException(`"${exception.path}" must be a directory`);
+    if (exception.code == FileErrorCode.EISDIR)
+      throw new BadRequestException(
+        `"${exception.path}" must not be a directory`,
+      );
   }
 }
