@@ -24,7 +24,7 @@ export class FilesResolver {
     @Args('path') path: string,
     @Args('offset', { nullable: true }) offset?: number,
   ): Promise<FileInfoList> {
-    return this.filesService.getChildrenFileInfo(path, offset ?? 0, 50);
+    return this.filesService.getChildrenFileInfo(path, offset ?? 0, 20);
   }
 
   @Mutation(() => FileInfo)
