@@ -44,11 +44,7 @@ export class FilesService {
     const items = await Promise.all(
       filepaths.map((path) => this.getFileInfo(path, false)),
     );
-    return {
-      offset,
-      total: filenames.length,
-      items,
-    };
+    return { offset, total: filenames.length, items };
   }
 
   async createFiles(paths: string[]): Promise<FileInfo[]> {
