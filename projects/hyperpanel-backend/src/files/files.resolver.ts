@@ -45,19 +45,19 @@ export class FilesResolver {
     return this.filesService.renameFile(path, newName);
   }
 
-  @Mutation(() => [FileInfo])
-  async moveFiles(
-    @Args('sourcePaths', { type: () => [String] }) sourcePaths: string[],
-    @Args('targetDirPath') targetDirPath: string,
-  ): Promise<FileInfo[]> {
-    return this.filesService.moveFiles(sourcePaths, targetDirPath);
+  @Mutation(() => FileInfo)
+  async moveFile(
+    @Args('sourcePath') sourcePath: string,
+    @Args('targetPath') targetPath: string,
+  ): Promise<FileInfo> {
+    return this.filesService.moveFile(sourcePath, targetPath);
   }
 
-  @Mutation(() => [FileInfo])
-  async copyFiles(
-    @Args('sourcePaths', { type: () => [String] }) sourcePaths: string[],
-    @Args('targetDirPath') targetDirPath: string,
-  ): Promise<FileInfo[]> {
-    return this.filesService.copyFiles(sourcePaths, targetDirPath);
+  @Mutation(() => FileInfo)
+  async copyFile(
+    @Args('sourcePath') sourcePath: string,
+    @Args('targetPath') targetPath: string,
+  ): Promise<FileInfo> {
+    return this.filesService.copyFile(sourcePath, targetPath);
   }
 }

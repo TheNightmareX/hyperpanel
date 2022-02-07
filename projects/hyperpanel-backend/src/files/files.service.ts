@@ -71,32 +71,16 @@ export class FilesService {
     return this.getFileInfo(path, false);
   }
 
-  async moveFiles(
-    sourcePaths: string[],
-    targetDirPath: string,
-  ): Promise<FileInfo[]> {
-    const tasks = sourcePaths.map(async (sourcePath) => {
-      const filename = pathLib.basename(sourcePath);
-      const targetPathCrude = pathLib.join(targetDirPath, filename);
-      const targetPath = await this.getNonConflictingPath(targetPathCrude);
-      await fsPromises.rename(sourcePath, targetPath);
-      return this.getFileInfo(targetPath, false);
-    });
-    return Promise.all(tasks);
+  async moveFile(sourcePath: string, targetPath: string): Promise<FileInfo> {
+    targetPath = await this.getNonConflictingPath(targetPath);
+    await fsPromises.rename(sourcePath, targetPath);
+    return this.getFileInfo(targetPath, false);
   }
 
-  async copyFiles(
-    sourcePaths: string[],
-    targetDirPath: string,
-  ): Promise<FileInfo[]> {
-    const tasks = sourcePaths.map(async (sourcePath) => {
-      const filename = pathLib.basename(sourcePath);
-      const targetPathCrude = pathLib.join(targetDirPath, filename);
-      const targetPath = await this.getNonConflictingPath(targetPathCrude);
-      await fsPromises.copyFile(sourcePath, targetPath);
-      return this.getFileInfo(targetPath, false);
-    });
-    return Promise.all(tasks);
+  async copyFile(sourcePath: string, targetPath: string): Promise<FileInfo> {
+    targetPath = await this.getNonConflictingPath(targetPath);
+    await fsPromises.copyFile(sourcePath, targetPath);
+    return this.getFileInfo(targetPath, false);
   }
 
   private getFileId(stats: fs.Stats): string {
