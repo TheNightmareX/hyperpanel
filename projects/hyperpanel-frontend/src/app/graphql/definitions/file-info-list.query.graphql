@@ -1,0 +1,13 @@
+query FileInfoList($path: String!, $offset: Int) {
+  fileInfoList(path: $path, offset: $offset) {
+    total
+    items {
+      id
+      name
+      type
+      size
+      sizeFormatted
+      modifiedAt
+    }
+  }
+}

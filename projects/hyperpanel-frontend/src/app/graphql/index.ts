@@ -110,6 +110,28 @@ export type AuthorizedQueryVariables = Exact<{ [key: string]: never }>;
 
 export type AuthorizedQuery = { __typename?: 'Query'; authorized: boolean };
 
+export type FileInfoListQueryVariables = Exact<{
+  path: Scalars['String'];
+  offset?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type FileInfoListQuery = {
+  __typename?: 'Query';
+  fileInfoList: {
+    __typename?: 'FileInfoList';
+    total: number;
+    items: Array<{
+      __typename?: 'FileInfo';
+      id: string;
+      name: string;
+      type: number;
+      size: number;
+      sizeFormatted: string;
+      modifiedAt: any;
+    }>;
+  };
+};
+
 export const AuthorizeDocument = gql`
   mutation Authorize($username: String!, $password: String!) {
     authorize(username: $username, password: $password)
@@ -143,6 +165,35 @@ export class AuthorizedGQL extends Apollo.Query<
   AuthorizedQueryVariables
 > {
   document = AuthorizedDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const FileInfoListDocument = gql`
+  query FileInfoList($path: String!, $offset: Int) {
+    fileInfoList(path: $path, offset: $offset) {
+      total
+      items {
+        id
+        name
+        type
+        size
+        sizeFormatted
+        modifiedAt
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class FileInfoListGQL extends Apollo.Query<
+  FileInfoListQuery,
+  FileInfoListQueryVariables
+> {
+  document = FileInfoListDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
