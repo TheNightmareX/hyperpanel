@@ -33,7 +33,7 @@ export type FileInfo = {
   realpath?: Maybe<Scalars['String']>;
   size: Scalars['Float'];
   sizeFormatted: Scalars['String'];
-  type: Scalars['Int'];
+  type: FileType;
 };
 
 export type FileInfoList = {
@@ -42,6 +42,13 @@ export type FileInfoList = {
   offset: Scalars['Int'];
   total: Scalars['Int'];
 };
+
+export enum FileType {
+  Directory = 'Directory',
+  File = 'File',
+  Other = 'Other',
+  Socket = 'Socket',
+}
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -124,7 +131,7 @@ export type FileInfoListQuery = {
       __typename?: 'FileInfo';
       id: string;
       name: string;
-      type: number;
+      type: FileType;
       size: number;
       sizeFormatted: string;
       modifiedAt: any;
