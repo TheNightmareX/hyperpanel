@@ -27,9 +27,11 @@ export class FilesResolver {
     return this.filesService.getChildrenFileInfo(path, offset ?? 0);
   }
 
-  @Mutation(() => String)
-  async createDirectory(@Args('path') path: string): Promise<string> {
-    return this.filesService.createDirectory(path);
+  @Mutation(() => [String])
+  async createDirectories(
+    @Args('paths', { type: () => [String] }) paths: string[],
+  ): Promise<string[]> {
+    return this.filesService.createDirectories(paths);
   }
 
   @Mutation(() => String)

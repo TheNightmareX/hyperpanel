@@ -52,10 +52,14 @@ export class FilesService {
     };
   }
 
-  async createDirectory(path: string): Promise<string> {
-    path = await this.getNonConflictingPath(path);
-    await fsPromises.mkdir(path, { recursive: true });
-    return path;
+  async createDirectories(paths: string[]): Promise<string[]> {
+    const tasks = paths.map(async (pathCrude) => {
+      const path = await this.getNonConflictingPath(pathCrude);
+      await fsPromises.mkdir(path, { recursive: true });
+      return path;
+    });
+    const resultPaths = await Promise.all(tasks);
+    return resultPaths;
   }
 
   async renameFile(path: string, newName: string): Promise<string> {
