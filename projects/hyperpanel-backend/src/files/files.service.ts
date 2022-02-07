@@ -35,10 +35,10 @@ export class FilesService {
   async getChildrenFileInfo(
     path: string,
     offset: number,
+    limit: number,
   ): Promise<FileInfoList> {
     const filenames = await fsPromises.readdir(path);
-    const LIMIT = 50;
-    const filenamesSliced = filenames.slice(offset, offset + LIMIT);
+    const filenamesSliced = filenames.slice(offset, offset + limit);
     const filepaths = filenamesSliced.map((filename) =>
       pathLib.join(path, filename),
     );
