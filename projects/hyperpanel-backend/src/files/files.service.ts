@@ -14,7 +14,6 @@ export class FilesService {
     const stats = await fsPromises.stat(path);
 
     const info: FileInfo = {
-      path,
       name: pathLib.basename(path),
       dirname: pathLib.dirname(path),
       type: this.getFileType(stats),
