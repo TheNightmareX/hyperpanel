@@ -19,7 +19,7 @@ export class FileInfo {
   @Field({ nullable: true })
   realpath?: string;
 
-  @Field()
+  @Field(() => FileType)
   type: FileType;
 
   @Field(() => Float) // big int
