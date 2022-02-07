@@ -16,11 +16,12 @@ export class FilesService {
     const info: FileInfo = {
       name: pathLib.basename(path),
       dirname: pathLib.dirname(path),
+      path,
+      realpath: await this.getRealpath(path),
       type: this.getFileType(stats),
       size: stats.size,
       sizeFormatted: this.formatSize(stats.size),
       modifiedAt: stats.mtime,
-      realpath: await this.getRealpath(path),
     };
 
     if (info.type == FileType.Directory && accurate) {

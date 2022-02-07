@@ -11,6 +11,12 @@ export class FileInfo {
   dirname: string;
 
   @Field()
+  path: string;
+
+  @Field({ nullable: true })
+  realpath?: string;
+
+  @Field()
   type: FileType;
 
   @Field(() => Float) // big int
@@ -21,7 +27,4 @@ export class FileInfo {
 
   @Field()
   modifiedAt: Date;
-
-  @Field({ nullable: true })
-  realpath?: string;
 }
