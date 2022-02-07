@@ -14,6 +14,7 @@ export class FilesService {
     const stats = await fsPromises.stat(path);
 
     const info: FileInfo = {
+      id: this.getFileId(stats),
       name: pathLib.basename(path),
       dirname: pathLib.dirname(path),
       path,
@@ -102,6 +103,10 @@ export class FilesService {
       return this.getFileInfo(targetPath, false);
     });
     return Promise.all(tasks);
+  }
+
+  private getFileId(stats: fs.Stats): string {
+    return `${stats.dev}:${stats.ino}`;
   }
 
   private getFileType(stats: fs.Stats): FileType {

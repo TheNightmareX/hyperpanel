@@ -5,6 +5,9 @@ import { FileType } from './file-type.enum';
 @ObjectType()
 export class FileInfo {
   @Field()
+  id: string;
+
+  @Field()
   name: string;
 
   @Field()
