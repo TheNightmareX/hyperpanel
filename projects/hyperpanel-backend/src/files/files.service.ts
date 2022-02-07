@@ -83,6 +83,12 @@ export class FilesService {
     return this.getFileInfo(targetPath, false);
   }
 
+  async removeFile(path: string): Promise<FileInfo> {
+    const fileInfo = await this.getFileInfo(path, false);
+    await fsPromises.rm(path, { recursive: true });
+    return fileInfo;
+  }
+
   private getFileId(stats: fs.Stats): string {
     return `${stats.dev}:${stats.ino}`;
   }

@@ -60,4 +60,9 @@ export class FilesResolver {
   ): Promise<FileInfo> {
     return this.filesService.copyFile(sourcePath, targetPath);
   }
+
+  @Mutation(() => FileInfo)
+  async removeFile(@Args('path') path: string): Promise<FileInfo> {
+    return this.filesService.removeFile(path);
+  }
 }
