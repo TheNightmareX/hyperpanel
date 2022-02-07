@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import formatSize from 'filesize';
-import { Stats } from 'fs';
-import * as fs from 'fs/promises';
+import * as fs from 'fs';
+import * as fsPromises from 'fs/promises';
 import * as pathLib from 'path';
 
 import { FileInfo } from './entities/file-info.entity';
@@ -11,7 +11,7 @@ import { FileType } from './entities/file-type.enum';
 @Injectable()
 export class FilesService {
   async getFileInfo(path: string, accurate: boolean): Promise<FileInfo> {
-    const stats = await fs.stat(path);
+    const stats = await fsPromises.stat(path);
 
     const info: FileInfo = {
       name: pathLib.basename(path),
@@ -35,7 +35,7 @@ export class FilesService {
     path: string,
     offset: number,
   ): Promise<FileInfoList> {
-    const filenames = await fs.readdir(path);
+    const filenames = await fsPromises.readdir(path);
     const LIMIT = 50;
     const filenamesSliced = filenames.slice(offset, offset + LIMIT);
     const filepaths = filenamesSliced.map((filename) =>
@@ -54,7 +54,7 @@ export class FilesService {
   async renameFile(path: string, newName: string): Promise<string> {
     const dirPath = pathLib.dirname(path);
     const newPath = pathLib.join(dirPath, newName);
-    await fs.rename(path, newPath);
+    await fsPromises.rename(path, newPath);
     return newPath;
   }
 
@@ -65,14 +65,14 @@ export class FilesService {
     const tasks = sourcePaths.map(async (sourcePath) => {
       const filename = pathLib.basename(sourcePath);
       const targetPath = pathLib.join(targetDirPath, filename);
-      await fs.rename(sourcePath, targetPath);
+      await fsPromises.rename(sourcePath, targetPath);
       return targetPath;
     });
     const resultPaths = await Promise.all(tasks);
     return resultPaths;
   }
 
-  private getFileType(stats: Stats): FileType {
+  private getFileType(stats: fs.Stats): FileType {
     return stats.isFile()
       ? FileType.File
       : stats.isDirectory()
@@ -83,13 +83,13 @@ export class FilesService {
   }
 
   private async getDirectorySize(path: string): Promise<number> {
-    const filenames = await fs.readdir(path);
+    const filenames = await fsPromises.readdir(path);
     const paths = filenames.map((name) => pathLib.join(path, name));
     let total = 0;
     await Promise.all(
       paths.map(async (path) => {
         try {
-          const stats = await fs.stat(path);
+          const stats = await fsPromises.stat(path);
           const size = stats.isFile()
             ? stats.size
             : stats.isDirectory()
@@ -103,7 +103,7 @@ export class FilesService {
   }
 
   private async getRealpath(path: string): Promise<string | null> {
-    const result = await fs.realpath(path);
+    const result = await fsPromises.realpath(path);
     return result == path ? null : result;
   }
 
