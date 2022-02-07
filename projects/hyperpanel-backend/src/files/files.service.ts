@@ -51,64 +51,60 @@ export class FilesService {
     };
   }
 
-  async createFiles(paths: string[]): Promise<string[]> {
+  async createFiles(paths: string[]): Promise<FileInfo[]> {
     const tasks = paths.map(async (pathCrude) => {
       const path = await this.getNonConflictingPath(pathCrude);
       const dirPath = pathLib.dirname(path);
       await fsPromises.mkdir(dirPath, { recursive: true });
       await fsPromises.writeFile(path, '');
-      return path;
+      return this.getFileInfo(path, false);
     });
-    const resultPaths = await Promise.all(tasks);
-    return resultPaths;
+    return Promise.all(tasks);
   }
 
-  async createDirectories(paths: string[]): Promise<string[]> {
+  async createDirectories(paths: string[]): Promise<FileInfo[]> {
     const tasks = paths.map(async (pathCrude) => {
       const path = await this.getNonConflictingPath(pathCrude);
       await fsPromises.mkdir(path, { recursive: true });
-      return path;
+      return this.getFileInfo(path, false);
     });
-    const resultPaths = await Promise.all(tasks);
-    return resultPaths;
+    return Promise.all(tasks);
   }
 
-  async renameFile(path: string, newName: string): Promise<string> {
+  async renameFile(path: string, newName: string): Promise<FileInfo> {
     const dirPath = pathLib.dirname(path);
     const newPathCrude = pathLib.join(dirPath, newName);
     const newPath = await this.getNonConflictingPath(newPathCrude);
     await fsPromises.rename(path, newPath);
-    return newPath;
+    return this.getFileInfo(path, false);
   }
 
   async moveFiles(
     sourcePaths: string[],
     targetDirPath: string,
-  ): Promise<string[]> {
+  ): Promise<FileInfo[]> {
     const tasks = sourcePaths.map(async (sourcePath) => {
       const filename = pathLib.basename(sourcePath);
       const targetPathCrude = pathLib.join(targetDirPath, filename);
       const targetPath = await this.getNonConflictingPath(targetPathCrude);
       await fsPromises.rename(sourcePath, targetPath);
-      return targetPath;
+      return this.getFileInfo(targetPath, false);
     });
-    const resultPaths = await Promise.all(tasks);
-    return resultPaths;
+    return Promise.all(tasks);
   }
 
   async copyFiles(
     sourcePaths: string[],
     targetDirPath: string,
-  ): Promise<string[]> {
+  ): Promise<FileInfo[]> {
     const tasks = sourcePaths.map(async (sourcePath) => {
       const filename = pathLib.basename(sourcePath);
       const targetPathCrude = pathLib.join(targetDirPath, filename);
       const targetPath = await this.getNonConflictingPath(targetPathCrude);
       await fsPromises.copyFile(sourcePath, targetPath);
-      return targetPath;
+      return this.getFileInfo(targetPath, false);
     });
-    const resultPaths = await Promise.all(tasks);
-    return resultPaths;
+    return Promise.all(tasks);
   }
 
   private getFileType(stats: fs.Stats): FileType {

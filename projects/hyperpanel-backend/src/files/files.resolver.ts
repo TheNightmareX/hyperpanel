@@ -27,41 +27,41 @@ export class FilesResolver {
     return this.filesService.getChildrenFileInfo(path, offset ?? 0, 50);
   }
 
-  @Mutation(() => [String])
+  @Mutation(() => [FileInfo])
   async createFiles(
     @Args('paths', { type: () => [String] }) paths: string[],
-  ): Promise<string[]> {
+  ): Promise<FileInfo[]> {
     return this.filesService.createFiles(paths);
   }
 
-  @Mutation(() => [String])
+  @Mutation(() => [FileInfo])
   async createDirectories(
     @Args('paths', { type: () => [String] }) paths: string[],
-  ): Promise<string[]> {
+  ): Promise<FileInfo[]> {
     return this.filesService.createDirectories(paths);
   }
 
-  @Mutation(() => String)
+  @Mutation(() => FileInfo)
   async renameFile(
     @Args('path') path: string,
     @Args('newName') newName: string,
-  ): Promise<string> {
+  ): Promise<FileInfo> {
     return this.filesService.renameFile(path, newName);
   }
 
-  @Mutation(() => [String])
+  @Mutation(() => [FileInfo])
   async moveFiles(
     @Args('sourcePaths', { type: () => [String] }) sourcePaths: string[],
     @Args('targetDirPath') targetDirPath: string,
-  ): Promise<string[]> {
+  ): Promise<FileInfo[]> {
     return this.filesService.moveFiles(sourcePaths, targetDirPath);
   }
 
-  @Mutation(() => [String])
+  @Mutation(() => [FileInfo])
   async copyFiles(
     @Args('sourcePaths', { type: () => [String] }) sourcePaths: string[],
     @Args('targetDirPath') targetDirPath: string,
-  ): Promise<string[]> {
+  ): Promise<FileInfo[]> {
     return this.filesService.copyFiles(sourcePaths, targetDirPath);
   }
 }
