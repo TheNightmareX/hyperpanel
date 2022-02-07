@@ -51,6 +51,18 @@ export class FilesService {
     };
   }
 
+  async createFiles(paths: string[]): Promise<string[]> {
+    const tasks = paths.map(async (pathCrude) => {
+      const path = await this.getNonConflictingPath(pathCrude);
+      const dirPath = pathLib.dirname(path);
+      await fsPromises.mkdir(dirPath, { recursive: true });
+      await fsPromises.writeFile(path, '');
+      return path;
+    });
+    const resultPaths = await Promise.all(tasks);
+    return resultPaths;
+  }
+
   async createDirectories(paths: string[]): Promise<string[]> {
     const tasks = paths.map(async (pathCrude) => {
       const path = await this.getNonConflictingPath(pathCrude);

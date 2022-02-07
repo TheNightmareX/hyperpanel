@@ -28,6 +28,13 @@ export class FilesResolver {
   }
 
   @Mutation(() => [String])
+  async createFiles(
+    @Args('paths', { type: () => [String] }) paths: string[],
+  ): Promise<string[]> {
+    return this.filesService.createFiles(paths);
+  }
+
+  @Mutation(() => [String])
   async createDirectories(
     @Args('paths', { type: () => [String] }) paths: string[],
   ): Promise<string[]> {
