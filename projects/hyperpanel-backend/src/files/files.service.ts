@@ -49,17 +49,15 @@ export class FilesService {
     return { offset, total: filenames.length, items };
   }
 
-  async createFile(path: string): Promise<FileInfo> {
+  async createFile(path: string, isDirectory: boolean): Promise<FileInfo> {
     path = await this.getNonConflictingPath(path);
-    const dirPath = pathLib.dirname(path);
-    await fsPromises.mkdir(dirPath, { recursive: true });
-    await fsPromises.writeFile(path, '');
-    return this.getFileInfo(path, false);
-  }
-
-  async createDirectory(path: string): Promise<FileInfo> {
-    path = await this.getNonConflictingPath(path);
-    await fsPromises.mkdir(path, { recursive: true });
+    if (isDirectory) {
+      await fsPromises.mkdir(path, { recursive: true });
+    } else {
+      const dirPath = pathLib.dirname(path);
+      await fsPromises.mkdir(dirPath, { recursive: true });
+      await fsPromises.writeFile(path, '');
+    }
     return this.getFileInfo(path, false);
   }
 

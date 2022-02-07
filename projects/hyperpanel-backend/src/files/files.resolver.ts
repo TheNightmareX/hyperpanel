@@ -28,13 +28,11 @@ export class FilesResolver {
   }
 
   @Mutation(() => FileInfo)
-  async createFile(@Args('path') path: string): Promise<FileInfo> {
-    return this.filesService.createFile(path);
-  }
-
-  @Mutation(() => FileInfo)
-  async createDirectory(@Args('path') path: string): Promise<FileInfo> {
-    return this.filesService.createDirectory(path);
+  async createFile(
+    @Args('path') path: string,
+    @Args('isDirectory', { nullable: true }) isDirectory?: boolean,
+  ): Promise<FileInfo> {
+    return this.filesService.createFile(path, isDirectory ?? false);
   }
 
   @Mutation(() => FileInfo)
