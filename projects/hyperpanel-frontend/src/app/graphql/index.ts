@@ -26,8 +26,10 @@ export type Scalars = {
 export type FileInfo = {
   __typename?: 'FileInfo';
   dirname: Scalars['String'];
+  id: Scalars['ID'];
   modifiedAt: Scalars['DateTime'];
   name: Scalars['String'];
+  path: Scalars['String'];
   realpath?: Maybe<Scalars['String']>;
   size: Scalars['Float'];
   sizeFormatted: Scalars['String'];
@@ -44,11 +46,40 @@ export type FileInfoList = {
 export type Mutation = {
   __typename?: 'Mutation';
   authorize: Scalars['String'];
+  copyFile: FileInfo;
+  createFile: FileInfo;
+  moveFile: FileInfo;
+  removeFile: FileInfo;
+  renameFile: FileInfo;
 };
 
 export type MutationAuthorizeArgs = {
   password: Scalars['String'];
   username: Scalars['String'];
+};
+
+export type MutationCopyFileArgs = {
+  sourcePath: Scalars['String'];
+  targetPath: Scalars['String'];
+};
+
+export type MutationCreateFileArgs = {
+  isDirectory?: InputMaybe<Scalars['Boolean']>;
+  path: Scalars['String'];
+};
+
+export type MutationMoveFileArgs = {
+  sourcePath: Scalars['String'];
+  targetPath: Scalars['String'];
+};
+
+export type MutationRemoveFileArgs = {
+  path: Scalars['String'];
+};
+
+export type MutationRenameFileArgs = {
+  newName: Scalars['String'];
+  path: Scalars['String'];
 };
 
 export type Query = {
