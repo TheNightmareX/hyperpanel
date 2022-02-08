@@ -102,6 +102,7 @@ export type QueryFileInfoDetailArgs = {
 };
 
 export type QueryFileInfoListArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   path: Scalars['String'];
 };
@@ -120,6 +121,7 @@ export type AuthorizedQuery = { __typename?: 'Query'; authorized: boolean };
 export type FileInfoListQueryVariables = Exact<{
   path: Scalars['String'];
   offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
 }>;
 
 export type FileInfoListQuery = {
@@ -178,8 +180,8 @@ export class AuthorizedGQL extends Apollo.Query<
   }
 }
 export const FileInfoListDocument = gql`
-  query FileInfoList($path: String!, $offset: Int) {
-    fileInfoList(path: $path, offset: $offset) {
+  query FileInfoList($path: String!, $offset: Int, $limit: Int) {
+    fileInfoList(path: $path, offset: $offset, limit: $limit) {
       total
       items {
         id

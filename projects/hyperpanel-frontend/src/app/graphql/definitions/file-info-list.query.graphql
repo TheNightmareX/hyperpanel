@@ -1,5 +1,5 @@
-query FileInfoList($path: String!, $offset: Int) {
-  fileInfoList(path: $path, offset: $offset) {
+query FileInfoList($path: String!, $offset: Int, $limit: Int) {
+  fileInfoList(path: $path, offset: $offset, limit: $limit) {
     total
     items {
       id
