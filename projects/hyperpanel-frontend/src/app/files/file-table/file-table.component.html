@@ -55,6 +55,7 @@
     [nzTotal]="total"
     (nzPageIndexChange)="query()"
     (nzPageSizeChange)="page = 1; query()"
+    [nzDisabled]="loading"
   ></nz-pagination>
 </div>
 
