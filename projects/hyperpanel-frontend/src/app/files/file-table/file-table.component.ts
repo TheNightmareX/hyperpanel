@@ -49,6 +49,8 @@ export class FileTableComponent implements OnInit, OnDestroy {
   query(): void {
     if (this.loading) return;
 
+    this.setAllItemsCheckedStatus(false);
+
     const offset = (this.page - 1) * this.limit;
     this.fileInfoListQuery = this.fileInfoListGql.watch({
       path: '/',
