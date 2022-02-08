@@ -2,7 +2,11 @@
   <nz-table class="table-content" nzTemplateMode [nzLoading]="loading" #table>
     <thead>
       <tr>
-        <th></th>
+        <th
+          [nzChecked]="!!getAllItemsCheckedStatus()"
+          [nzIndeterminate]="getAllItemsCheckedStatus() == null"
+          (nzCheckedChange)="setAllItemsCheckedStatus($event)"
+        ></th>
         <th>Name</th>
         <th>Modified At</th>
         <th>Type</th>
