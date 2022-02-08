@@ -35,7 +35,7 @@
     nzShowSizeChanger
     nzShowQuickJumper
     [(nzPageIndex)]="page"
-    [(nzPageSize)]="limit"
+    [(nzPageSize)]="size"
     [nzTotal]="total"
     (nzPageIndexChange)="query()"
     (nzPageSizeChange)="page = 1; query()"

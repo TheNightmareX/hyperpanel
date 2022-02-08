@@ -25,7 +25,7 @@ export class FileTableComponent implements OnInit, OnDestroy {
   items: FileTableItem[] = [];
   private itemsChecked = new Set<FileTableItem>();
   page = 1;
-  limit = 10;
+  size = 10;
   total = 10;
   loading = false;
   fileInfoListQuery?: QueryRef<FileInfoListQuery, FileInfoListQueryVariables>;
@@ -51,11 +51,11 @@ export class FileTableComponent implements OnInit, OnDestroy {
 
     this.setAllItemsCheckedStatus(false);
 
-    const offset = (this.page - 1) * this.limit;
+    const offset = (this.page - 1) * this.size;
     this.fileInfoListQuery = this.fileInfoListGql.watch({
       path: '/',
       offset,
-      limit: this.limit,
+      limit: this.size,
     });
 
     this.loading = true;
