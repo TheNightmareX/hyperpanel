@@ -3,6 +3,7 @@ import { Module, NotFoundException } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 
 import { AuthModule } from './auth/auth.module';
+import { CoreModule } from './core/core.module';
 import { DB_PATH, DEBUG } from './env.constants';
 import { FilesModule } from './files/files.module';
 
@@ -25,6 +26,7 @@ import { FilesModule } from './files/files.module';
       findOneOrFailHandler: () => new NotFoundException(),
       debug: DEBUG,
     }),
+    CoreModule,
     AuthModule,
     FilesModule,
   ],
