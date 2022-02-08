@@ -16,15 +16,19 @@ export class FilesResolver {
     @Args('path') path: string,
     @Args('accurate', { nullable: true }) accurate?: boolean,
   ): Promise<FileInfo> {
-    return this.filesService.getFileInfo(path, accurate ?? false);
+    accurate = accurate ?? false;
+    return this.filesService.getFileInfo(path, accurate);
   }
 
   @Query(() => FileInfoList)
   async fileInfoList(
     @Args('path') path: string,
     @Args('offset', { nullable: true }) offset?: number,
+    @Args('limit', { nullable: true }) limit?: number,
   ): Promise<FileInfoList> {
-    return this.filesService.getChildrenFileInfo(path, offset ?? 0, 20);
+    offset = offset ?? 0;
+    limit = limit ?? 20;
+    return this.filesService.getChildrenFileInfo(path, offset, limit);
   }
 
   @Mutation(() => FileInfo)
@@ -32,7 +36,8 @@ export class FilesResolver {
     @Args('path') path: string,
     @Args('isDirectory', { nullable: true }) isDirectory?: boolean,
   ): Promise<FileInfo> {
-    return this.filesService.createFile(path, isDirectory ?? false);
+    isDirectory = isDirectory ?? false;
+    return this.filesService.createFile(path, isDirectory);
   }
 
   @Mutation(() => FileInfo)
