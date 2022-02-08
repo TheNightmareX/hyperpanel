@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit, TrackByFunction } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { QueryRef } from 'apollo-angular';
 import { NzContextMenuService } from 'ng-zorro-antd/dropdown';
 import { Subscription } from 'rxjs';
@@ -22,6 +23,7 @@ export interface FileTableItem extends FileInfo {
   styleUrls: ['./file-table.component.less'],
 })
 export class FileTableComponent implements OnInit, OnDestroy {
+  path = '/';
   items: FileTableItem[] = [];
   private itemsChecked = new Set<FileTableItem>();
   page = 1;
@@ -35,11 +37,17 @@ export class FileTableComponent implements OnInit, OnDestroy {
 
   constructor(
     public menuService: NzContextMenuService,
+    private router: Router,
+    private route: ActivatedRoute,
     private fileInfoListGql: FileInfoListGQL,
   ) {}
 
   ngOnInit(): void {
-    this.query();
+    this.route.params.subscribe((params) => {
+      this.path = params['path'] ?? '/';
+      this.page = 1;
+      this.query();
+    });
   }
 
   ngOnDestroy(): void {
@@ -53,7 +61,7 @@ export class FileTableComponent implements OnInit, OnDestroy {
 
     const offset = (this.page - 1) * this.size;
     this.fileInfoListQuery = this.fileInfoListGql.watch({
-      path: '/',
+      path: this.path,
       offset,
       limit: this.size,
     });
@@ -72,6 +80,11 @@ export class FileTableComponent implements OnInit, OnDestroy {
             item.type == FileType.Directory ? null : item.sizeFormatted,
         }));
       });
+  }
+
+  openItem(item: FileTableItem): void {
+    if (item.type == FileType.Directory)
+      this.router.navigate([{ path: item.path }], { relativeTo: this.route });
   }
 
   selectItem(item: FileTableItem): void {
