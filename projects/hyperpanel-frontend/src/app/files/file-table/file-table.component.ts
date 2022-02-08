@@ -13,6 +13,7 @@ import {
 type FileInfo = FileInfoListQuery['fileInfoList']['items'][number];
 
 export interface FileTableItem extends FileInfo {
+  icon: string;
   typeFinalized: string | null;
   sizeFinalized: string | null;
 }
@@ -73,6 +74,7 @@ export class FileTableComponent implements OnInit, OnDestroy {
         this.total = total;
         this.items = items.map((item) => ({
           ...item,
+          icon: item.type == FileType.Directory ? 'folder-open' : 'file-text',
           typeFinalized: item.type == FileType.Directory ? null : item.type,
           sizeFinalized:
             item.type == FileType.Directory ? null : item.sizeFormatted,

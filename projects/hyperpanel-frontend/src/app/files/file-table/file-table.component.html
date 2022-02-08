@@ -23,7 +23,10 @@
           [nzChecked]="getItemCheckedStatus(item)"
           (nzCheckedChange)="setItemCheckedStatus(item, $event)"
         ></td>
-        <td>{{ item.name }}</td>
+        <td>
+          <i nz-icon [nzType]="item.icon"></i>
+          <span>{{ item.name }}</span>
+        </td>
         <td>{{ item.modifiedAt | date: 'yyyy/MM/dd HH:mm:ss' }}</td>
         <td>{{ item.typeFinalized }}</td>
         <td>{{ item.sizeFinalized }}</td>
