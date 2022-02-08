@@ -72,12 +72,16 @@ export class FileTableComponent implements OnInit, OnDestroy {
       });
   }
 
+  selectItem(item: FileTableItem): void {
+    this.setAllItemsCheckedStatus(false);
+    this.setItemCheckedStatus(item, true);
+  }
+
   getItemCheckedStatus(item: FileTableItem): boolean {
     return this.itemsChecked.has(item);
   }
 
-  setItemCheckedStatus(item: FileTableItem, checked?: boolean): void {
-    if (checked == undefined) checked = !this.getItemCheckedStatus(item);
+  setItemCheckedStatus(item: FileTableItem, checked: boolean): void {
     if (checked) this.itemsChecked.add(item);
     else this.itemsChecked.delete(item);
   }
