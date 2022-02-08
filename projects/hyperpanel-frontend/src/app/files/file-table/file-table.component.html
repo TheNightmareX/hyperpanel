@@ -3,7 +3,14 @@
     class="table-navigation"
     [path]="path"
   ></app-file-table-navigator>
-  <nz-table class="table-content" nzTemplateMode [nzLoading]="loading" #table>
+  <nz-table
+    class="table-content"
+    [nzData]="items"
+    [nzFrontPagination]="false"
+    [nzShowPagination]="false"
+    [nzLoading]="loading"
+    #table
+  >
     <thead>
       <tr>
         <th
@@ -19,7 +26,7 @@
     </thead>
     <tbody (contextmenu)="menuService.create($event, menu)">
       <tr
-        *ngFor="let item of items; trackBy: tracker"
+        *ngFor="let item of table.data; trackBy: tracker"
         (click)="selectItem(item)"
         (dblclick)="openItem(item)"
       >
