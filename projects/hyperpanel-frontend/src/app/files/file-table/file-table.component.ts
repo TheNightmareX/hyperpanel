@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { QueryRef } from 'apollo-angular';
-import { map, Observable, tap } from 'rxjs';
+import { Subscription } from 'rxjs';
 import {
   FileInfoListGQL,
   FileInfoListQuery,
@@ -14,19 +14,27 @@ type FileInfoList = FileInfoListQuery['fileInfoList'];
   templateUrl: './file-table.component.html',
   styleUrls: ['./file-table.component.less'],
 })
-export class FileTableComponent implements OnInit {
-  fileInfoList$!: Observable<FileInfoList>;
-  fileInfoListQuery!: QueryRef<FileInfoListQuery, FileInfoListQueryVariables>;
+export class FileTableComponent implements OnInit, OnDestroy {
+  fileInfoList: FileInfoList = { items: [], total: 0 };
+  fileInfoListQuery?: QueryRef<FileInfoListQuery, FileInfoListQueryVariables>;
 
   page = 1;
   limit = 10;
   loading = false;
 
+  private fileInfoListSubscription?: Subscription;
+
   constructor(private fileInfoListGql: FileInfoListGQL) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.query();
+  }
 
-  load(): void {
+  ngOnDestroy(): void {
+    this.fileInfoListSubscription?.unsubscribe();
+  }
+
+  query(): void {
     if (this.loading) return;
 
     const offset = (this.page - 1) * this.limit;
@@ -37,9 +45,11 @@ export class FileTableComponent implements OnInit {
     });
 
     this.loading = true;
-    this.fileInfoList$ = this.fileInfoListQuery.valueChanges.pipe(
-      tap(() => (this.loading = false)),
-      map((result) => result.data.fileInfoList),
-    );
+    this.fileInfoListSubscription?.unsubscribe();
+    this.fileInfoListSubscription =
+      this.fileInfoListQuery.valueChanges.subscribe((result) => {
+        this.loading = false;
+        this.fileInfoList = result.data.fileInfoList;
+      });
   }
 }

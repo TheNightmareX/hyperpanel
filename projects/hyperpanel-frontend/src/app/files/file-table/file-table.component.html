@@ -1,29 +1,31 @@
-<nz-table
-  nzShowSizeChanger
-  nzShowQuickJumper
-  [nzFrontPagination]="false"
-  [nzLoading]="loading"
-  [(nzPageSize)]="limit"
-  [(nzPageIndex)]="page"
-  [nzTotal]="(fileInfoList$ | async)?.total ?? 0"
-  [nzData]="(fileInfoList$ | async)?.items ?? []"
-  (nzQueryParams)="load()"
-  #table
->
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Modified Date</th>
-      <th>Type</th>
-      <th>Size</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let fileInfo of table.data">
-      <td>{{ fileInfo.name }}</td>
-      <td>{{ fileInfo.modifiedAt | date: 'yyyy/MM/dd HH:mm:ss' }}</td>
-      <td>{{ fileInfo.type }}</td>
-      <td>{{ fileInfo.sizeFormatted }}</td>
-    </tr>
-  </tbody>
-</nz-table>
+<div class="container">
+  <nz-table class="table-content" nzTemplateMode [nzLoading]="loading" #table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Modified Date</th>
+        <th>Type</th>
+        <th>Size</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let fileInfo of fileInfoList.items">
+        <td>{{ fileInfo.name }}</td>
+        <td>{{ fileInfo.modifiedAt | date: 'yyyy/MM/dd HH:mm:ss' }}</td>
+        <td>{{ fileInfo.type }}</td>
+        <td>{{ fileInfo.sizeFormatted }}</td>
+      </tr>
+    </tbody>
+  </nz-table>
+  <nz-pagination
+    class="table-pagination"
+    nzResponsive
+    nzShowSizeChanger
+    nzShowQuickJumper
+    [(nzPageIndex)]="page"
+    [(nzPageSize)]="limit"
+    [nzTotal]="fileInfoList.total"
+    (nzPageIndexChange)="query()"
+    (nzPageSizeChange)="page = 1; query()"
+  ></nz-pagination>
+</div>
