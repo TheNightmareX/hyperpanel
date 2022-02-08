@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit, TrackByFunction } from '@angular/core';
 import { QueryRef } from 'apollo-angular';
+import { NzContextMenuService } from 'ng-zorro-antd/dropdown';
 import { Subscription } from 'rxjs';
 import {
   FileInfoListGQL,
@@ -27,7 +28,10 @@ export class FileTableComponent implements OnInit, OnDestroy {
 
   private fileInfoListSubscription?: Subscription;
 
-  constructor(private fileInfoListGql: FileInfoListGQL) {}
+  constructor(
+    public menuService: NzContextMenuService,
+    private fileInfoListGql: FileInfoListGQL,
+  ) {}
 
   ngOnInit(): void {
     this.query();

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 import { NzTableModule } from 'ng-zorro-antd/table';
 
@@ -23,6 +24,7 @@ import { FilesRoutingModule } from './files-routing.module';
     NzCardModule,
     NzTableModule,
     NzPaginationModule,
+    NzDropDownModule,
   ],
 })
 export class FilesModule {}
