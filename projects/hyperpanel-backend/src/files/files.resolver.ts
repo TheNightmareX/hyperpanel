@@ -16,7 +16,6 @@ export class FilesResolver {
     @Args('path') path: string,
     @Args('accurate', { nullable: true }) accurate?: boolean,
   ): Promise<FileInfo> {
-    accurate = accurate ?? false;
     return this.filesService.getFileInfo(path, accurate);
   }
 
@@ -26,8 +25,6 @@ export class FilesResolver {
     @Args('offset', { nullable: true }) offset?: number,
     @Args('limit', { nullable: true }) limit?: number,
   ): Promise<FileInfoList> {
-    offset = offset ?? 0;
-    limit = limit ?? 20;
     return this.filesService.getChildrenFileInfo(path, offset, limit);
   }
 
@@ -36,7 +33,6 @@ export class FilesResolver {
     @Args('path') path: string,
     @Args('isDirectory', { nullable: true }) isDirectory?: boolean,
   ): Promise<FileInfo> {
-    isDirectory = isDirectory ?? false;
     return this.filesService.createFile(path, isDirectory);
   }
 

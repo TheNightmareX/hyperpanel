@@ -10,7 +10,7 @@ import { FileType } from './entities/file-type.enum';
 
 @Injectable()
 export class FilesService {
-  async getFileInfo(path: string, accurate: boolean): Promise<FileInfo> {
+  async getFileInfo(path: string, accurate = false): Promise<FileInfo> {
     const stats = await fsPromises.stat(path);
 
     const info: FileInfo = {
@@ -35,8 +35,8 @@ export class FilesService {
 
   async getChildrenFileInfo(
     path: string,
-    offset: number,
-    limit: number,
+    offset = 0,
+    limit = 20,
   ): Promise<FileInfoList> {
     const filenames = await fsPromises.readdir(path);
     const filenamesSliced = filenames.slice(offset, offset + limit);
@@ -44,12 +44,12 @@ export class FilesService {
       pathLib.join(path, filename),
     );
     const items = await Promise.all(
-      filepaths.map((path) => this.getFileInfo(path, false)),
+      filepaths.map((path) => this.getFileInfo(path)),
     );
     return { offset, total: filenames.length, items };
   }
 
-  async createFile(path: string, isDirectory: boolean): Promise<FileInfo> {
+  async createFile(path: string, isDirectory = false): Promise<FileInfo> {
     path = await this.getNonConflictingPath(path);
     if (isDirectory) {
       await fsPromises.mkdir(path, { recursive: true });
@@ -58,7 +58,7 @@ export class FilesService {
       await fsPromises.mkdir(dirPath, { recursive: true });
       await fsPromises.writeFile(path, '');
     }
-    return this.getFileInfo(path, false);
+    return this.getFileInfo(path);
   }
 
   async renameFile(path: string, newName: string): Promise<FileInfo> {
@@ -66,23 +66,23 @@ export class FilesService {
     const newPathCrude = pathLib.join(dirPath, newName);
     const newPath = await this.getNonConflictingPath(newPathCrude);
     await fsPromises.rename(path, newPath);
-    return this.getFileInfo(path, false);
+    return this.getFileInfo(path);
   }
 
   async moveFile(sourcePath: string, targetPath: string): Promise<FileInfo> {
     targetPath = await this.getNonConflictingPath(targetPath);
     await fsPromises.rename(sourcePath, targetPath);
-    return this.getFileInfo(targetPath, false);
+    return this.getFileInfo(targetPath);
   }
 
   async copyFile(sourcePath: string, targetPath: string): Promise<FileInfo> {
     targetPath = await this.getNonConflictingPath(targetPath);
     await fsPromises.copyFile(sourcePath, targetPath);
-    return this.getFileInfo(targetPath, false);
+    return this.getFileInfo(targetPath);
   }
 
   async removeFile(path: string): Promise<FileInfo> {
-    const fileInfo = await this.getFileInfo(path, false);
+    const fileInfo = await this.getFileInfo(path);
     await fsPromises.rm(path, { recursive: true });
     return fileInfo;
   }
