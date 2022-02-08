@@ -133,6 +133,7 @@ export type FileInfoListQuery = {
       __typename?: 'FileInfo';
       id: string;
       name: string;
+      path: string;
       type: FileType;
       size: number;
       sizeFormatted: string;
@@ -186,6 +187,7 @@ export const FileInfoListDocument = gql`
       items {
         id
         name
+        path
         type
         size
         sizeFormatted

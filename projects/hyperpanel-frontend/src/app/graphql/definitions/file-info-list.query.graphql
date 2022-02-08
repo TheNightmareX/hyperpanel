@@ -4,6 +4,7 @@ query FileInfoList($path: String!, $offset: Int, $limit: Int) {
     items {
       id
       name
+      path
       type
       size
       sizeFormatted
