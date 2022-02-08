@@ -1,0 +1,8 @@
+<nz-breadcrumb>
+  <nz-breadcrumb-item>
+    <i nz-icon nzType="home"></i>
+  </nz-breadcrumb-item>
+  <nz-breadcrumb-item *ngFor="let segment of path.split('/').slice(1)">
+    {{ segment }}
+  </nz-breadcrumb-item>
+</nz-breadcrumb>

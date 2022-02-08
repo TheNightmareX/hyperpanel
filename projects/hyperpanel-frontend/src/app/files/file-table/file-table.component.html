@@ -1,4 +1,8 @@
 <div class="container">
+  <app-file-table-navigator
+    class="table-navigation"
+    [path]="path"
+  ></app-file-table-navigator>
   <nz-table class="table-content" nzTemplateMode [nzLoading]="loading" #table>
     <thead>
       <tr>
