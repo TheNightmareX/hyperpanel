@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { FileInfoListQuery, FileType } from 'src/app/graphql';
 
 type FileInfo = FileInfoListQuery['fileInfoList']['items'][number];
@@ -13,6 +13,7 @@ export class FileTableRowComponent implements OnInit {
     this.update(value);
   }
 
+  checked = false;
   name?: string;
   modifiedAt?: string;
   type?: FileType | null;
@@ -28,5 +29,10 @@ export class FileTableRowComponent implements OnInit {
     this.type = fileInfo.type == FileType.Directory ? null : fileInfo.type;
     this.size =
       fileInfo.type == FileType.Directory ? null : fileInfo.sizeFormatted;
+  }
+
+  @HostListener('click')
+  onHostClick(): void {
+    this.checked = !this.checked;
   }
 }
