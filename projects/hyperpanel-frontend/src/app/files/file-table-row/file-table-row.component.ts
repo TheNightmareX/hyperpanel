@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FileInfoListQuery } from 'src/app/graphql';
+import { FileInfoListQuery, FileType } from 'src/app/graphql';
 
 type FileInfo = FileInfoListQuery['fileInfoList']['items'][number];
 
@@ -9,9 +9,24 @@ type FileInfo = FileInfoListQuery['fileInfoList']['items'][number];
   styleUrls: ['./file-table-row.component.less'],
 })
 export class FileTableRowComponent implements OnInit {
-  @Input() fileInfo?: FileInfo;
+  @Input() set fileInfo(value: FileInfo) {
+    this.update(value);
+  }
+
+  name?: string;
+  modifiedAt?: string;
+  type?: FileType | null;
+  size?: string | null;
 
   constructor() {}
 
   ngOnInit(): void {}
+
+  update(fileInfo: FileInfo): void {
+    this.name = fileInfo.name;
+    this.modifiedAt = fileInfo.modifiedAt;
+    this.type = fileInfo.type == FileType.Directory ? null : fileInfo.type;
+    this.size =
+      fileInfo.type == FileType.Directory ? null : fileInfo.sizeFormatted;
+  }
 }
