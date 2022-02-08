@@ -6,10 +6,15 @@ import {
   FileInfoListGQL,
   FileInfoListQuery,
   FileInfoListQueryVariables,
+  FileType,
 } from 'src/app/graphql';
 
-type FileInfoList = FileInfoListQuery['fileInfoList'];
-type FileInfo = FileInfoList['items'][number];
+type FileInfo = FileInfoListQuery['fileInfoList']['items'][number];
+
+export interface FileTableItem extends FileInfo {
+  typeFinalized: string | null;
+  sizeFinalized: string | null;
+}
 
 @Component({
   selector: 'app-file-table',
@@ -17,16 +22,16 @@ type FileInfo = FileInfoList['items'][number];
   styleUrls: ['./file-table.component.less'],
 })
 export class FileTableComponent implements OnInit, OnDestroy {
-  fileInfoList: FileInfoList = { items: [], total: 0 };
-  fileInfoListQuery?: QueryRef<FileInfoListQuery, FileInfoListQueryVariables>;
-
+  items: FileTableItem[] = [];
+  private itemsChecked = new Set<FileTableItem>();
   page = 1;
   limit = 10;
+  total = 10;
   loading = false;
+  fileInfoListQuery?: QueryRef<FileInfoListQuery, FileInfoListQueryVariables>;
+  private fileInfoListSubscription?: Subscription;
 
   tracker: TrackByFunction<FileInfo> = (_, item): string => item.id;
-
-  private fileInfoListSubscription?: Subscription;
 
   constructor(
     public menuService: NzContextMenuService,
@@ -56,7 +61,24 @@ export class FileTableComponent implements OnInit, OnDestroy {
     this.fileInfoListSubscription =
       this.fileInfoListQuery.valueChanges.subscribe((result) => {
         this.loading = false;
-        this.fileInfoList = result.data.fileInfoList;
+        const { total, items } = result.data.fileInfoList;
+        this.total = total;
+        this.items = items.map((item) => ({
+          ...item,
+          typeFinalized: item.type == FileType.Directory ? null : item.type,
+          sizeFinalized:
+            item.type == FileType.Directory ? null : item.sizeFormatted,
+        }));
       });
+  }
+
+  getItemCheckedStatus(item: FileTableItem): boolean {
+    return this.itemsChecked.has(item);
+  }
+
+  setItemCheckedStatus(item: FileTableItem, checked?: boolean): void {
+    if (checked == undefined) checked = !this.getItemCheckedStatus(item);
+    if (checked) this.itemsChecked.add(item);
+    else this.itemsChecked.delete(item);
   }
 }

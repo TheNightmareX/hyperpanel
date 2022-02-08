@@ -11,10 +11,18 @@
     </thead>
     <tbody (contextmenu)="menuService.create($event, menu)">
       <tr
-        app-file-table-row
-        *ngFor="let fileInfo of fileInfoList.items; trackBy: tracker"
-        [fileInfo]="fileInfo"
-      ></tr>
+        *ngFor="let item of items; trackBy: tracker"
+        (click)="setItemCheckedStatus(item)"
+      >
+        <td
+          [nzChecked]="getItemCheckedStatus(item)"
+          (nzCheckedChange)="setItemCheckedStatus(item, $event)"
+        ></td>
+        <td>{{ item.name }}</td>
+        <td>{{ item.modifiedAt | date: 'yyyy/MM/dd HH:mm:ss' }}</td>
+        <td>{{ item.typeFinalized }}</td>
+        <td>{{ item.sizeFinalized }}</td>
+      </tr>
     </tbody>
   </nz-table>
   <nz-pagination
@@ -24,7 +32,7 @@
     nzShowQuickJumper
     [(nzPageIndex)]="page"
     [(nzPageSize)]="limit"
-    [nzTotal]="fileInfoList.total"
+    [nzTotal]="total"
     (nzPageIndexChange)="query()"
     (nzPageSizeChange)="page = 1; query()"
   ></nz-pagination>
