@@ -5,11 +5,12 @@ import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 import { NzTableModule } from 'ng-zorro-antd/table';
 
 import { FileTableComponent } from './file-table/file-table.component';
+import { FileTableRowComponent } from './file-table-row/file-table-row.component';
 import { FilesComponent } from './files.component';
 import { FilesRoutingModule } from './files-routing.module';
 
 @NgModule({
-  declarations: [FilesComponent, FileTableComponent],
+  declarations: [FilesComponent, FileTableComponent, FileTableRowComponent],
   imports: [
     CommonModule,
     FilesRoutingModule,
