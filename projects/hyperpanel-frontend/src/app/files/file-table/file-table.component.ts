@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, TrackByFunction } from '@angular/core';
 import { QueryRef } from 'apollo-angular';
 import { Subscription } from 'rxjs';
 import {
@@ -8,6 +8,7 @@ import {
 } from 'src/app/graphql';
 
 type FileInfoList = FileInfoListQuery['fileInfoList'];
+type FileInfo = FileInfoList['items'][number];
 
 @Component({
   selector: 'app-file-table',
@@ -21,6 +22,8 @@ export class FileTableComponent implements OnInit, OnDestroy {
   page = 1;
   limit = 10;
   loading = false;
+
+  tracker: TrackByFunction<FileInfo> = (_, item): string => item.id;
 
   private fileInfoListSubscription?: Subscription;
 

@@ -12,7 +12,7 @@
     <tbody>
       <tr
         app-file-table-row
-        *ngFor="let fileInfo of fileInfoList.items"
+        *ngFor="let fileInfo of fileInfoList.items; trackBy: tracker"
         [fileInfo]="fileInfo"
       ></tr>
     </tbody>
