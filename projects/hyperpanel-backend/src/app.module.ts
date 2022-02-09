@@ -13,7 +13,6 @@ import { FilesModule } from './files/files.module';
       buildSchemaOptions: {
         numberScalarMode: 'integer',
       },
-      cors: true,
       autoSchemaFile: true,
       debug: DEBUG,
       playground: DEBUG,
