@@ -7,7 +7,6 @@ import {
   HomeOutline,
 } from '@ant-design/icons-angular/icons';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
-import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
@@ -36,7 +35,6 @@ const icons: IconDefinition[] = [
     CommonModule,
     FilesRoutingModule,
     NzIconModule.forChild(icons),
-    NzCardModule,
     NzTableModule,
     NzPaginationModule,
     NzDropDownModule,
