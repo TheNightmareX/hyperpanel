@@ -20,13 +20,9 @@ export class FileTableNavigationComponent implements OnInit {
 
   items: FileTableNavigationItem[] = [];
 
-  constructor(private navigator: FileTableNavigator) {}
+  constructor(public navigator: FileTableNavigator) {}
 
   ngOnInit(): void {}
-
-  navigate(path: string): void {
-    this.navigator.navigate(path);
-  }
 
   parsePath(path: string): FileTableNavigationItem[] {
     const segments = path.split('/').filter((v) => !!v);
