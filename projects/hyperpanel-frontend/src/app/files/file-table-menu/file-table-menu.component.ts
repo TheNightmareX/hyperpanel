@@ -25,7 +25,7 @@ export class FileTableMenuComponent implements OnInit {
   private menu!: NzDropdownMenuComponent;
 
   constructor(
-    public table: FileTableComponent,
+    private table: FileTableComponent,
     private menuService: NzContextMenuService,
   ) {}
 
@@ -33,5 +33,9 @@ export class FileTableMenuComponent implements OnInit {
 
   open(event: MouseEvent): void {
     this.menuService.create(event, this.menu);
+  }
+
+  openTarget(): void {
+    this.table.openItem(this.target);
   }
 }
