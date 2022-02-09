@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+
+import { FileTableNavigator } from '../file-table/file-table-navigator.service';
 
 interface FileTableNavigationItem {
   segment: string;
@@ -19,12 +20,12 @@ export class FileTableNavigationComponent implements OnInit {
 
   items: FileTableNavigationItem[] = [];
 
-  constructor(private router: Router, private route: ActivatedRoute) {}
+  constructor(private navigator: FileTableNavigator) {}
 
   ngOnInit(): void {}
 
   navigate(path: string): void {
-    this.router.navigate([{ path }], { relativeTo: this.route });
+    this.navigator.navigate(path);
   }
 
   parsePath(path: string): FileTableNavigationItem[] {

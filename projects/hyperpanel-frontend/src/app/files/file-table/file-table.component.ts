@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit, TrackByFunction } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { QueryRef } from 'apollo-angular';
 import { NzContextMenuService } from 'ng-zorro-antd/dropdown';
 import { Subscription } from 'rxjs';
@@ -41,14 +40,13 @@ export class FileTableComponent implements OnInit, OnDestroy {
 
   constructor(
     public menuService: NzContextMenuService,
-    private router: Router,
-    private route: ActivatedRoute,
     private fileInfoListGql: FileInfoListGQL,
+    private navigator: FileTableNavigator,
   ) {}
 
   ngOnInit(): void {
-    this.route.params.subscribe((params) => {
-      this.path = params['path'] ?? '/';
+    this.navigator.path$.subscribe((path) => {
+      this.path = path;
       this.page = 1;
       this.query();
     });
@@ -87,8 +85,7 @@ export class FileTableComponent implements OnInit, OnDestroy {
   }
 
   openItem(item: FileTableItem): void {
-    if (item.type == FileType.Directory)
-      this.router.navigate([{ path: item.path }], { relativeTo: this.route });
+    if (item.type == FileType.Directory) this.navigator.navigate(item.path);
   }
 
   selectItem(item: FileTableItem): void {
