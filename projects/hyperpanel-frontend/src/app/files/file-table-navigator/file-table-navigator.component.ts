@@ -14,13 +14,7 @@ interface FileTableNavigatorItem {
 export class FileTableNavigatorComponent implements OnInit {
   @Input()
   set path(value: string) {
-    const segments = value.split('/').filter((v) => !!v);
-    this.items = [
-      ...segments.map((segment, index) => ({
-        segment,
-        path: '/' + segments.slice(0, index + 1).join('/'),
-      })),
-    ];
+    this.items = this.parsePath(value);
   }
 
   items: FileTableNavigatorItem[] = [];
@@ -31,5 +25,15 @@ export class FileTableNavigatorComponent implements OnInit {
 
   navigate(path: string): void {
     this.router.navigate([{ path }], { relativeTo: this.route });
+  }
+
+  parsePath(path: string): FileTableNavigatorItem[] {
+    const segments = path.split('/').filter((v) => !!v);
+    return [
+      ...segments.map((segment, index) => ({
+        segment,
+        path: '/' + segments.slice(0, index + 1).join('/'),
+      })),
+    ];
   }
 }
