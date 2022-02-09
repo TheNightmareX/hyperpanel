@@ -10,6 +10,8 @@ import {
   FileType,
 } from 'src/app/graphql';
 
+import { FileTableNavigator } from './file-table-navigator.service';
+
 type FileInfo = FileInfoListQuery['fileInfoList']['items'][number];
 
 export interface FileTableItem extends FileInfo {
@@ -22,6 +24,7 @@ export interface FileTableItem extends FileInfo {
   selector: 'app-file-table',
   templateUrl: './file-table.component.html',
   styleUrls: ['./file-table.component.less'],
+  providers: [FileTableNavigator],
 })
 export class FileTableComponent implements OnInit, OnDestroy {
   path = '/';
