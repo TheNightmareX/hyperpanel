@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+
+import {
+  FileTableComponent,
+  FileTableItem,
+} from '../file-table/file-table.component';
 
 @Component({
   selector: 'app-file-table-menu',
@@ -6,7 +11,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./file-table-menu.component.less'],
 })
 export class FileTableMenuComponent implements OnInit {
-  constructor() {}
+  @Input() targets = new Set<FileTableItem>();
+
+  get target(): FileTableItem {
+    return this.targets.values().next().value;
+  }
+
+  constructor(public table: FileTableComponent) {}
 
   ngOnInit(): void {}
 }

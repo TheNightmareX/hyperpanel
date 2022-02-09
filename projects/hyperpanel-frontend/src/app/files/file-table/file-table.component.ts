@@ -34,7 +34,7 @@ export class FileTableComponent implements OnInit, OnDestroy {
   path = '/';
 
   items: FileTableItem[] = [];
-  private itemsChecked = new Set<FileTableItem>();
+  itemsChecked = new Set<FileTableItem>();
 
   page = 1;
   size = 100;

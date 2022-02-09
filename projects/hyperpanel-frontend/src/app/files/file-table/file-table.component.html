@@ -63,5 +63,8 @@
 </div>
 
 <nz-dropdown-menu #menu>
-  <app-file-table-menu></app-file-table-menu>
+  <app-file-table-menu
+    [targets]="itemsChecked"
+    #menuContent
+  ></app-file-table-menu>
 </nz-dropdown-menu>

@@ -7,6 +7,7 @@ import {
   FileTextOutline,
   FolderOpenOutline,
   HomeOutline,
+  SelectOutline,
 } from '@ant-design/icons-angular/icons';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -23,11 +24,12 @@ import { FilesComponent } from './files.component';
 import { FilesRoutingModule } from './files-routing.module';
 
 const icons: IconDefinition[] = [
+  ArrowLeftOutline,
+  ArrowRightOutline,
   FileTextOutline,
   FolderOpenOutline,
   HomeOutline,
-  ArrowLeftOutline,
-  ArrowRightOutline,
+  SelectOutline,
 ];
 
 @NgModule({
