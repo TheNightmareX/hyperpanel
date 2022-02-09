@@ -15,6 +15,7 @@ type FileInfo = FileInfoListQuery['fileInfoList']['items'][number];
 
 export interface FileTableItem extends FileInfo {
   icon: string;
+  modifiedAt: Date;
   typeFinalized: string | null;
   sizeFinalized: string | null;
 }
@@ -76,6 +77,7 @@ export class FileTableComponent implements OnInit, OnDestroy {
         this.items = items.map((item) => ({
           ...item,
           icon: item.type == FileType.Directory ? 'folder-open' : 'file-text',
+          modifiedAt: new Date(item.modifiedAt),
           typeFinalized: item.type == FileType.Directory ? null : item.type,
           sizeFinalized:
             item.type == FileType.Directory ? null : item.sizeFormatted,
