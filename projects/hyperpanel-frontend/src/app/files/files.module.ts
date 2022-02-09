@@ -4,6 +4,7 @@ import { IconDefinition } from '@ant-design/icons-angular';
 import {
   ArrowLeftOutline,
   ArrowRightOutline,
+  DownloadOutline,
   FileTextOutline,
   FolderOpenOutline,
   HomeOutline,
@@ -26,6 +27,7 @@ import { FilesRoutingModule } from './files-routing.module';
 const icons: IconDefinition[] = [
   ArrowLeftOutline,
   ArrowRightOutline,
+  DownloadOutline,
   FileTextOutline,
   FolderOpenOutline,
   HomeOutline,

@@ -3,11 +3,13 @@ import {
   NzContextMenuService,
   NzDropdownMenuComponent,
 } from 'ng-zorro-antd/dropdown';
+import { FileType } from 'src/app/graphql';
 
 import {
   FileTableComponent,
   FileTableItem,
 } from '../file-table/file-table.component';
+import { FilesService } from '../files.service';
 
 @Component({
   selector: 'app-file-table-menu',
@@ -15,10 +17,12 @@ import {
   styleUrls: ['./file-table-menu.component.less'],
 })
 export class FileTableMenuComponent implements OnInit {
+  FileType = FileType;
+
   @Input() targets = new Set<FileTableItem>();
 
-  get target(): FileTableItem {
-    return this.targets.values().next().value;
+  get target(): FileTableItem | null {
+    return this.targets.size == 1 ? this.targets.values().next().value : null;
   }
 
   @ViewChild(NzDropdownMenuComponent)
@@ -27,6 +31,7 @@ export class FileTableMenuComponent implements OnInit {
   constructor(
     private table: FileTableComponent,
     private menuService: NzContextMenuService,
+    private filesService: FilesService,
   ) {}
 
   ngOnInit(): void {}
@@ -36,6 +41,12 @@ export class FileTableMenuComponent implements OnInit {
   }
 
   openTarget(): void {
+    if (!this.target) return;
     this.table.openItem(this.target);
+  }
+
+  saveTarget(): void {
+    if (!this.target) return;
+    this.filesService.save(this.target.path, this.target.name);
   }
 }

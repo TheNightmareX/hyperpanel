@@ -4,5 +4,13 @@
       <i nz-icon nzType="select"></i>
       <span>Open</span>
     </li>
+    <li
+      nz-menu-item
+      (click)="saveTarget()"
+      *ngIf="target && target.type == FileType.File"
+    >
+      <i nz-icon nzType="download"></i>
+      <span>Download</span>
+    </li>
   </ul>
 </nz-dropdown-menu>
