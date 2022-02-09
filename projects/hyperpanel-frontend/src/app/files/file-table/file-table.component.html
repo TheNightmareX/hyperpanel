@@ -62,9 +62,4 @@
   ></nz-pagination>
 </div>
 
-<nz-dropdown-menu #menu>
-  <app-file-table-menu
-    [targets]="itemsChecked"
-    #menuContent
-  ></app-file-table-menu>
-</nz-dropdown-menu>
+<app-file-table-menu [targets]="itemsChecked" #menu></app-file-table-menu>

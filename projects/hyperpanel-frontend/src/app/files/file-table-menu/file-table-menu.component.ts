@@ -1,4 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  NzContextMenuService,
+  NzDropdownMenuComponent,
+} from 'ng-zorro-antd/dropdown';
 
 import {
   FileTableComponent,
@@ -17,7 +21,17 @@ export class FileTableMenuComponent implements OnInit {
     return this.targets.values().next().value;
   }
 
-  constructor(public table: FileTableComponent) {}
+  @ViewChild(NzDropdownMenuComponent)
+  private menu!: NzDropdownMenuComponent;
+
+  constructor(
+    public table: FileTableComponent,
+    private menuService: NzContextMenuService,
+  ) {}
 
   ngOnInit(): void {}
+
+  open(event: MouseEvent): void {
+    this.menuService.create(event, this.menu);
+  }
 }
