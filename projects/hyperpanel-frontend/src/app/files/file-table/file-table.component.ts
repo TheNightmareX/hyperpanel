@@ -1,6 +1,9 @@
 import { Component, OnDestroy, OnInit, TrackByFunction } from '@angular/core';
 import { QueryRef } from 'apollo-angular';
-import { NzContextMenuService } from 'ng-zorro-antd/dropdown';
+import {
+  NzContextMenuService,
+  NzDropdownMenuComponent,
+} from 'ng-zorro-antd/dropdown';
 import { NzTableSortFn } from 'ng-zorro-antd/table';
 import { Subscription } from 'rxjs';
 import {
@@ -54,9 +57,9 @@ export class FileTableComponent implements OnInit, OnDestroy {
   ];
 
   constructor(
-    public menuService: NzContextMenuService,
-    private fileInfoListGql: FileInfoListGQL,
+    private menuService: NzContextMenuService,
     private navigator: FileTableNavigator,
+    private fileInfoListGql: FileInfoListGQL,
   ) {}
 
   ngOnInit(): void {
@@ -107,6 +110,15 @@ export class FileTableComponent implements OnInit, OnDestroy {
   selectItem(item: FileTableItem): void {
     this.setAllItemsCheckedStatus(false);
     this.setItemCheckedStatus(item, true);
+  }
+
+  openMenu(
+    item: FileTableItem,
+    event: MouseEvent,
+    menu: NzDropdownMenuComponent,
+  ): void {
+    if (!this.itemsChecked.has(item)) this.selectItem(item);
+    this.menuService.create(event, menu);
   }
 
   getItemCheckedStatus(item: FileTableItem): boolean {

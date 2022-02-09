@@ -25,11 +25,12 @@
         <th [nzSortFn]="sorters[3]">Size</th>
       </tr>
     </thead>
-    <tbody (contextmenu)="menuService.create($event, menu)">
+    <tbody>
       <tr
         *ngFor="let item of table.data; trackBy: tracker"
         (click)="selectItem(item)"
         (dblclick)="openItem(item)"
+        (contextmenu)="openMenu(item, $event, menu)"
       >
         <td
           [nzChecked]="getItemCheckedStatus(item)"
