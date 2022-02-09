@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, Observable } from 'rxjs';
 
+// TODO: catch user's browser-level forwards and backwards and sync with our
+// history.
+
 @Injectable()
 export class FileTableNavigator {
   path$: Observable<string>;
