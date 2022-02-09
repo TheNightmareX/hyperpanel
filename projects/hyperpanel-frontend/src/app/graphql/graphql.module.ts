@@ -10,7 +10,7 @@ import { GraphqlDeferrerInterceptor } from './graphql-deferrer.interceptor';
 
 export function createApollo(httpLink: HttpLink): ApolloClientOptions<any> {
   return {
-    link: httpLink.create({ uri: environment.graphqlUri }),
+    link: httpLink.create({ uri: `${environment.serverUrl}/graphql` }),
     cache: new InMemoryCache(),
   };
 }
