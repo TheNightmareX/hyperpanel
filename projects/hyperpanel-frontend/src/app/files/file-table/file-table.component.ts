@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit, TrackByFunction } from '@angular/core';
 import { QueryRef } from 'apollo-angular';
 import { NzContextMenuService } from 'ng-zorro-antd/dropdown';
+import { NzTableSortFn } from 'ng-zorro-antd/table';
 import { Subscription } from 'rxjs';
 import {
   FileInfoListGQL,
@@ -41,6 +42,16 @@ export class FileTableComponent implements OnInit, OnDestroy {
   private fileInfoListSubscription?: Subscription;
 
   tracker: TrackByFunction<FileInfo> = (_, item): string => item.id;
+  sorters: NzTableSortFn<FileTableItem>[] = [
+    this.getSorter((a, b) => (a.name > b.name ? 1 : a.name < b.name ? -1 : 0)),
+    this.getSorter((a, b) => a.modifiedAt.getTime() - b.modifiedAt.getTime()),
+    this.getSorter((a, b) => (a.type > b.type ? 1 : a.type < b.type ? -1 : 0)),
+    this.getSorter(
+      (a, b) =>
+        (a.type == FileType.File ? a.size : 0) -
+        (b.type == FileType.File ? b.size : 0),
+    ),
+  ];
 
   constructor(
     public menuService: NzContextMenuService,
@@ -118,5 +129,23 @@ export class FileTableComponent implements OnInit, OnDestroy {
   setAllItemsCheckedStatus(checked: boolean): void {
     if (checked) this.items.forEach((item) => this.itemsChecked.add(item));
     else this.itemsChecked.clear();
+  }
+
+  /**
+   * Ensure that directories are always sorted before files.
+   * @param base
+   * @returns
+   */
+  private getSorter(
+    base: NzTableSortFn<FileTableItem>,
+  ): NzTableSortFn<FileTableItem> {
+    return (a, b) =>
+      a.type != b.type
+        ? a.type == FileType.Directory
+          ? -1
+          : b.type == FileType.Directory
+          ? 1
+          : base(a, b)
+        : base(a, b);
   }
 }

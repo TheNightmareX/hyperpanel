@@ -19,10 +19,10 @@
           [nzIndeterminate]="getAllItemsCheckedStatus() == null"
           (nzCheckedChange)="setAllItemsCheckedStatus($event)"
         ></th>
-        <th>Name</th>
-        <th>Modified At</th>
-        <th>Type</th>
-        <th>Size</th>
+        <th [nzSortFn]="sorters[0]" nzSortOrder="ascend">Name</th>
+        <th [nzSortFn]="sorters[1]">Modified At</th>
+        <th [nzSortFn]="sorters[2]">Type</th>
+        <th [nzSortFn]="sorters[3]">Size</th>
       </tr>
     </thead>
     <tbody (contextmenu)="menuService.create($event, menu)">
