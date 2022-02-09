@@ -28,12 +28,15 @@ export interface FileTableItem extends FileInfo {
 })
 export class FileTableComponent implements OnInit, OnDestroy {
   path = '/';
+
   items: FileTableItem[] = [];
   private itemsChecked = new Set<FileTableItem>();
+
   page = 1;
   size = 100;
   total?: number;
   loading = false;
+
   fileInfoListQuery?: QueryRef<FileInfoListQuery, FileInfoListQueryVariables>;
   private fileInfoListSubscription?: Subscription;
 
