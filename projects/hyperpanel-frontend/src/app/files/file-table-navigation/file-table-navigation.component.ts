@@ -1,23 +1,23 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-interface FileTableNavigatorItem {
+interface FileTableNavigationItem {
   segment: string;
   path: string;
 }
 
 @Component({
-  selector: 'app-file-table-navigator',
-  templateUrl: './file-table-navigator.component.html',
-  styleUrls: ['./file-table-navigator.component.less'],
+  selector: 'app-file-table-navigation',
+  templateUrl: './file-table-navigation.component.html',
+  styleUrls: ['./file-table-navigation.component.less'],
 })
-export class FileTableNavigatorComponent implements OnInit {
+export class FileTableNavigationComponent implements OnInit {
   @Input()
   set path(value: string) {
     this.items = this.parsePath(value);
   }
 
-  items: FileTableNavigatorItem[] = [];
+  items: FileTableNavigationItem[] = [];
 
   constructor(private router: Router, private route: ActivatedRoute) {}
 
@@ -27,7 +27,7 @@ export class FileTableNavigatorComponent implements OnInit {
     this.router.navigate([{ path }], { relativeTo: this.route });
   }
 
-  parsePath(path: string): FileTableNavigatorItem[] {
+  parsePath(path: string): FileTableNavigationItem[] {
     const segments = path.split('/').filter((v) => !!v);
     return [
       ...segments.map((segment, index) => ({

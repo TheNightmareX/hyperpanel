@@ -14,7 +14,7 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 
 import { FileTableComponent } from './file-table/file-table.component';
 import { FileTableMenuComponent } from './file-table-menu/file-table-menu.component';
-import { FileTableNavigatorComponent } from './file-table-navigator/file-table-navigator.component';
+import { FileTableNavigationComponent } from './file-table-navigation/file-table-navigation.component';
 import { FilesComponent } from './files.component';
 import { FilesRoutingModule } from './files-routing.module';
 
@@ -29,7 +29,7 @@ const icons: IconDefinition[] = [
     FilesComponent,
     FileTableComponent,
     FileTableMenuComponent,
-    FileTableNavigatorComponent,
+    FileTableNavigationComponent,
   ],
   imports: [
     CommonModule,
