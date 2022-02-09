@@ -7,9 +7,10 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { GqlExecutionContext } from '@nestjs/graphql';
+import { GqlContextType, GqlExecutionContext } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
 import { ExpressContext } from 'apollo-server-express';
+import { Request } from 'express';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -21,16 +22,14 @@ export class AuthGuard implements CanActivate {
     private readonly jwtService: JwtService,
   ) {}
 
-  async canActivate(contextRaw: ExecutionContext): Promise<boolean> {
-    const context = GqlExecutionContext.create(contextRaw);
-
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const shouldSkip = this.reflector.getAllAndOverride(AuthGuard.skip, [
       context.getHandler(),
       context.getClass(),
     ]);
     if (shouldSkip) return true;
 
-    const request = context.getContext<ExpressContext>().req;
+    const request = this.getRequest(context);
     const token = this.parseToken(request.headers.authorization ?? '');
     if (!token) throw new UnauthorizedException();
     await this.jwtService.verifyAsync(token).catch(() => {
@@ -44,5 +43,11 @@ export class AuthGuard implements CanActivate {
     return authorization.startsWith(prefix)
       ? authorization.slice(prefix.length)
       : null;
+  }
+
+  private getRequest(context: ExecutionContext): Request {
+    if (context.getType<GqlContextType>() == 'http')
+      return context.switchToHttp().getRequest();
+    return GqlExecutionContext.create(context).getContext<ExpressContext>().req;
   }
 }
