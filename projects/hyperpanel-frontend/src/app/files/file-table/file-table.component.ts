@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit, TrackByFunction } from '@angular/core';
 import { QueryRef } from 'apollo-angular';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzTableSortFn } from 'ng-zorro-antd/table';
 import { Subscription } from 'rxjs';
 import {
@@ -53,6 +54,7 @@ export class FileTableComponent implements OnInit, OnDestroy {
   ];
 
   constructor(
+    private messageService: NzMessageService,
     private navigator: FileTableNavigator,
     private fileInfoListGql: FileInfoListGQL,
   ) {}
@@ -82,24 +84,33 @@ export class FileTableComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.fileInfoListSubscription?.unsubscribe();
     this.fileInfoListSubscription =
-      this.fileInfoListQuery.valueChanges.subscribe((result) => {
-        this.loading = false;
-        const { total, items } = result.data.fileInfoList;
-        this.total = total;
-        this.items = items
-          .filter(
-            (item): item is FileInfoListItemFragment =>
-              !!(item as FileInfoListItemFragment).id,
-          )
-          .map((item) => ({
-            ...item,
-            icon: item.type == FileType.Directory ? 'folder-open' : 'file-text',
-            modifiedAt: new Date(item.modifiedAt),
-            typeFinalized: item.type == FileType.Directory ? null : item.type,
-            sizeFinalized:
-              item.type == FileType.Directory ? null : item.sizeFormatted,
-          }));
-        this.itemsChecked.clear();
+      this.fileInfoListQuery.valueChanges.subscribe({
+        next: (result) => {
+          this.loading = false;
+          const { total, items } = result.data.fileInfoList;
+          this.total = total;
+          this.items = items
+            .filter(
+              (item): item is FileInfoListItemFragment =>
+                !!(item as FileInfoListItemFragment).id,
+            )
+            .map((item) => ({
+              ...item,
+              icon:
+                item.type == FileType.Directory ? 'folder-open' : 'file-text',
+              modifiedAt: new Date(item.modifiedAt),
+              typeFinalized: item.type == FileType.Directory ? null : item.type,
+              sizeFinalized:
+                item.type == FileType.Directory ? null : item.sizeFormatted,
+            }));
+          this.itemsChecked.clear();
+        },
+        error: (err) => {
+          this.loading = false;
+          this.messageService.error(`Query files failed: ${err.message}`);
+          if (this.navigator.canBackward) this.navigator.backward();
+          else this.navigator.navigate('/');
+        },
       });
   }
 
