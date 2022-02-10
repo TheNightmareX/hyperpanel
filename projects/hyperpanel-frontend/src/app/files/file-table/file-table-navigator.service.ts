@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map, Observable } from 'rxjs';
+import { first, map, Observable } from 'rxjs';
 
 // TODO: catch user's browser-level forwards and backwards and sync with our
 // history.
@@ -8,7 +8,7 @@ import { map, Observable } from 'rxjs';
 @Injectable()
 export class FileTableNavigator {
   path$: Observable<string>;
-  histories: string[] = ['/'];
+  histories: string[] = [];
   position = 0;
 
   get canForward(): boolean {
@@ -21,6 +21,7 @@ export class FileTableNavigator {
 
   constructor(private router: Router, private route: ActivatedRoute) {
     this.path$ = this.route.params.pipe(map((params) => params['path'] ?? '/'));
+    this.path$.pipe(first()).subscribe((path) => (this.histories = [path]));
   }
 
   navigate(path: string): void {
