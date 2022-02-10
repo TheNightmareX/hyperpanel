@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Type } from '@nestjs/common';
 import formatSize from 'filesize';
 import * as fs from 'fs';
 import * as fsPromises from 'fs/promises';
@@ -13,7 +13,7 @@ export class FilesService {
   async getFileInfo(path: string, accurate = false): Promise<FileInfo> {
     const stats = await fsPromises.stat(path);
 
-    const info: FileInfo = {
+    const info = this.instantiate(FileInfo, {
       id: this.getFileId(stats),
       name: pathLib.basename(path),
       dirname: pathLib.dirname(path),
@@ -23,7 +23,7 @@ export class FilesService {
       size: stats.size,
       sizeFormatted: this.formatSize(stats.size),
       modifiedAt: stats.mtime,
-    };
+    });
 
     if (info.type == FileType.Directory && accurate) {
       info.size = await this.getDirectorySize(path);
@@ -144,5 +144,14 @@ export class FilesService {
 
   private formatSize(size: number): string {
     return formatSize(size, { base: 2, standard: 'jedec' });
+  }
+
+  private instantiate<Instance>(
+    type: Type<Instance>,
+    data: Instance,
+  ): Instance {
+    const instance = new type();
+    Object.assign(instance, data);
+    return instance;
   }
 }
