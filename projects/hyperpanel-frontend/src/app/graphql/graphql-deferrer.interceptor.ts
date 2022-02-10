@@ -9,6 +9,9 @@ import { Observable } from 'rxjs';
 
 import { deferTime } from '../common/deferTime.operator';
 
+/**
+ * @deprecated Temporary deprecated.
+ */
 @Injectable()
 export class GraphqlDeferrerInterceptor implements HttpInterceptor {
   constructor() {}
