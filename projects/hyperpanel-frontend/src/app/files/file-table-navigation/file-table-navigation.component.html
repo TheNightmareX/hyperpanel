@@ -32,12 +32,9 @@
     <nz-breadcrumb-item></nz-breadcrumb-item>
   </nz-breadcrumb>
 
-  <input
-    nz-input
-    class="path"
-    *ngIf="editorVisible"
-    [(ngModel)]="editorValue"
-  />
+  <form class="path" *ngIf="editorVisible" (ngSubmit)="closeEditor()">
+    <input nz-input name="value" [(ngModel)]="editorValue" />
+  </form>
 
   <button
     nz-button
