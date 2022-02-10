@@ -46,9 +46,6 @@ export class FileTableComponent implements OnInit, OnDestroy {
   total?: number;
   loading = false;
 
-  fileInfoListQuery?: QueryRef<FileInfoListQuery, FileInfoListQueryVariables>;
-  private fileInfoListSubscription?: Subscription;
-
   tracker: TrackByFunction<FileTableItemEntry> = (...[, [, item]]): string =>
     item.id;
   sorters: NzTableSortFn<FileTableItem>[] = [
@@ -64,6 +61,12 @@ export class FileTableComponent implements OnInit, OnDestroy {
 
   @ViewChild(NzTableComponent) private table!: NzTableComponent<FileTableItem>;
   private tableDataIndexLastClicked = 0;
+
+  private fileInfoListQuery?: QueryRef<
+    FileInfoListQuery,
+    FileInfoListQueryVariables
+  >;
+  private fileInfoListSubscription?: Subscription;
 
   constructor(
     private messageService: NzMessageService,
