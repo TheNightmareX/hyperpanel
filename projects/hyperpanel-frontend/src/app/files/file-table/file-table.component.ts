@@ -126,6 +126,18 @@ export class FileTableComponent implements OnInit, OnDestroy {
       });
   }
 
+  /**
+   * - Shift + Ctrl: Select the items between the last clicked item and the
+   * current item.
+   * - Shift: Select **only** the items between the last clicked item and the
+   * current item.
+   * - Ctrl: Switch the clicked item's checked status.
+   * - [None]: Select **only** the clicked item.
+   *
+   * @param index
+   * @param item
+   * @param $event
+   */
   handleItemClick(
     index: number,
     item: FileTableItem,
@@ -134,8 +146,6 @@ export class FileTableComponent implements OnInit, OnDestroy {
     const ctrl = $event.ctrlKey;
     const shift = $event.shiftKey;
     if (shift) {
-      // Select [only] (if ctrl is not pressed) the items between the last
-      // clicked item and the current item.
       if (!ctrl) this.setAllItemsCheckedStatus(false);
       const indexLast = this.tableDataIndexLastClicked;
       const itemsCovered = this.table.data.slice(
@@ -145,11 +155,9 @@ export class FileTableComponent implements OnInit, OnDestroy {
       );
       itemsCovered.forEach((item) => this.setItemCheckedStatus(item, true));
     } else if (ctrl) {
-      // Switch the clicked item's checked status.
       const checked = this.getItemCheckedStatus(item);
       this.setItemCheckedStatus(item, !checked);
     } else {
-      // Select only the clicked item.
       this.setAllItemsCheckedStatus(false);
       this.setItemCheckedStatus(item, true);
     }
