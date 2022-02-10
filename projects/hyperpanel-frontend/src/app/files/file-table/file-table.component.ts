@@ -133,13 +133,10 @@ export class FileTableComponent implements OnInit, OnDestroy {
   ): void {
     const ctrl = $event.ctrlKey;
     const shift = $event.shiftKey;
-    if (ctrl && shift) {
-      // TODO: implement
-    } else if (ctrl) {
-      // Switch the clicked item's checked status.
-      const checked = this.getItemCheckedStatus(item);
-      this.setItemCheckedStatus(item, !checked);
-    } else if (shift) {
+    if (shift) {
+      // Select [only] (if ctrl is not pressed) the items between the last
+      // clicked item and the current item.
+      if (!ctrl) this.setAllItemsCheckedStatus(false);
       const indexLast = this.tableDataIndexLastClicked;
       const itemsCovered = this.table.data.slice(
         ...(indexLast < index
@@ -147,6 +144,10 @@ export class FileTableComponent implements OnInit, OnDestroy {
           : [index, indexLast + 1]),
       );
       itemsCovered.forEach((item) => this.setItemCheckedStatus(item, true));
+    } else if (ctrl) {
+      // Switch the clicked item's checked status.
+      const checked = this.getItemCheckedStatus(item);
+      this.setItemCheckedStatus(item, !checked);
     } else {
       // Select only the clicked item.
       this.setAllItemsCheckedStatus(false);
