@@ -148,6 +148,7 @@ export class FileTableComponent implements OnInit, OnDestroy {
   ): void {
     const ctrl = $event.ctrlKey;
     const shift = $event.shiftKey;
+    // TODO: optimize implementation
     if (shift) {
       if (!ctrl) this.setAllItemsCheckedStatus(false);
       const indexLast = this.tableDataIndexLastClicked;
