@@ -25,7 +25,6 @@ export type Scalars = {
 
 export type FileInfo = {
   __typename?: 'FileInfo';
-  dirname: Scalars['String'];
   id: Scalars['ID'];
   modifiedAt: Scalars['DateTime'];
   name: Scalars['String'];
@@ -48,6 +47,7 @@ export type FileInfoListItem = FileInfo | FileInfoPartial;
 export type FileInfoPartial = {
   __typename?: 'FileInfoPartial';
   name: Scalars['String'];
+  path: Scalars['String'];
 };
 
 export enum FileType {
