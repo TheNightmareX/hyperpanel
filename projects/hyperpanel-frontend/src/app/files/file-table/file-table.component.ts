@@ -114,13 +114,26 @@ export class FileTableComponent implements OnInit, OnDestroy {
       });
   }
 
-  openItem(item: FileTableItem): void {
-    if (item.type == FileType.Directory) this.navigator.navigate(item.path);
+  handleItemClick(item: FileTableItem, $event: MouseEvent): void {
+    const ctrl = $event.ctrlKey;
+    const shift = $event.shiftKey;
+    if (ctrl && shift) {
+      // TODO: implement
+    } else if (ctrl) {
+      // Switch the clicked item's checked status.
+      const checked = this.getItemCheckedStatus(item);
+      this.setItemCheckedStatus(item, !checked);
+    } else if (shift) {
+      // TODO: implement
+    } else {
+      // Select only the clicked item.
+      this.setAllItemsCheckedStatus(false);
+      this.setItemCheckedStatus(item, true);
+    }
   }
 
-  selectItem(item: FileTableItem): void {
-    this.setAllItemsCheckedStatus(false);
-    this.setItemCheckedStatus(item, true);
+  openItem(item: FileTableItem): void {
+    if (item.type == FileType.Directory) this.navigator.navigate(item.path);
   }
 
   openMenu(
@@ -128,7 +141,10 @@ export class FileTableComponent implements OnInit, OnDestroy {
     event: MouseEvent,
     menu: FileTableMenuComponent,
   ): void {
-    if (!this.itemsChecked.has(item)) this.selectItem(item);
+    if (!this.getItemCheckedStatus(item)) {
+      this.setAllItemsCheckedStatus(false);
+      this.setItemCheckedStatus(item, true);
+    }
     menu.open(event);
   }
 
