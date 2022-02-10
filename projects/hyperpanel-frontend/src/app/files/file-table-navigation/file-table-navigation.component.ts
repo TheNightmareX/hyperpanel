@@ -14,6 +14,8 @@ interface FileTableNavigationItem {
 })
 export class FileTableNavigationComponent implements OnInit {
   items: FileTableNavigationItem[] = [];
+  editorVisible = false;
+  editorValue = '';
 
   constructor(public navigator: FileTableNavigator) {}
 
@@ -31,5 +33,16 @@ export class FileTableNavigationComponent implements OnInit {
         path: '/' + segments.slice(0, index + 1).join('/'),
       })),
     ];
+  }
+
+  openEditor(): void {
+    const path = this.navigator.histories[this.navigator.position];
+    this.editorValue = path;
+    this.editorVisible = true;
+  }
+
+  closeEditor(): void {
+    this.editorVisible = false;
+    if (this.editorValue) this.navigator.navigate(this.editorValue);
   }
 }

@@ -1,20 +1,24 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { IconDefinition } from '@ant-design/icons-angular';
 import {
   ArrowLeftOutline,
   ArrowRightOutline,
   DownloadOutline,
+  EditOutline,
   FileTextOutline,
   FolderOpenOutline,
   HomeOutline,
   SelectOutline,
+  SendOutline,
 } from '@ant-design/icons-angular/icons';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzMessageModule } from 'ng-zorro-antd/message';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 import { NzTableModule } from 'ng-zorro-antd/table';
@@ -29,10 +33,12 @@ const icons: IconDefinition[] = [
   ArrowLeftOutline,
   ArrowRightOutline,
   DownloadOutline,
+  EditOutline,
   FileTextOutline,
   FolderOpenOutline,
   HomeOutline,
   SelectOutline,
+  SendOutline,
 ];
 
 @NgModule({
@@ -44,6 +50,7 @@ const icons: IconDefinition[] = [
   ],
   imports: [
     CommonModule,
+    FormsModule,
     FilesRoutingModule,
     NzIconModule.forChild(icons),
     NzMessageModule,
@@ -53,6 +60,7 @@ const icons: IconDefinition[] = [
     NzBreadCrumbModule,
     NzButtonModule,
     NzDividerModule,
+    NzInputModule,
   ],
 })
 export class FilesModule {}
