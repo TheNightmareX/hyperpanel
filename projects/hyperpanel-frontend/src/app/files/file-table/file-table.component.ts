@@ -102,6 +102,8 @@ export class FileTableComponent implements OnInit, OnDestroy {
       this.fileInfoListQuery.valueChanges.subscribe({
         next: (result) => {
           this.loading = false;
+          this.itemsChecked.clear();
+          this.tableDataIndexLastClicked = 0;
           const { total, items } = result.data.fileInfoList;
           this.total = total;
           this.items = items
@@ -118,7 +120,6 @@ export class FileTableComponent implements OnInit, OnDestroy {
               sizeFinalized:
                 item.type == FileType.Directory ? null : item.sizeFormatted,
             }));
-          this.itemsChecked.clear();
         },
         error: (err) => {
           this.loading = false;
