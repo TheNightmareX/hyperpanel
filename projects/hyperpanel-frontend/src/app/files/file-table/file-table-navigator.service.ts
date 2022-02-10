@@ -24,6 +24,7 @@ export class FileTableNavigator {
   }
 
   navigate(path: string): void {
+    if (path == this.histories[this.position]) return;
     this.histories.length = ++this.position;
     this.histories[this.position] = path;
     this.router.navigate([{ path }], {
