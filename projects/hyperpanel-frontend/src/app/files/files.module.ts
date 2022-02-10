@@ -17,7 +17,6 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMessageModule } from 'ng-zorro-antd/message';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
-import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzTableModule } from 'ng-zorro-antd/table';
 
 import { FileTableComponent } from './file-table/file-table.component';
@@ -53,7 +52,6 @@ const icons: IconDefinition[] = [
     NzDropDownModule,
     NzBreadCrumbModule,
     NzButtonModule,
-    NzSpaceModule,
     NzDividerModule,
   ],
 })
