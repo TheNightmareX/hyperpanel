@@ -2,13 +2,26 @@ query FileInfoList($path: String!, $offset: Int, $limit: Int) {
   fileInfoList(path: $path, offset: $offset, limit: $limit) {
     total
     items {
-      id
-      name
-      path
-      type
-      size
-      sizeFormatted
-      modifiedAt
+      ... on FileInfo {
+        ...FileInfoListItem
+      }
+      ... on FileInfoPartial {
+        ...FileInfoListItemPartial
+      }
     }
   }
+}
+
+fragment FileInfoListItem on FileInfo {
+  id
+  name
+  path
+  type
+  size
+  sizeFormatted
+  modifiedAt
+}
+
+fragment FileInfoListItemPartial on FileInfoPartial {
+  name
 }

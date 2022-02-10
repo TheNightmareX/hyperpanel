@@ -38,9 +38,16 @@ export type FileInfo = {
 
 export type FileInfoList = {
   __typename?: 'FileInfoList';
-  items: Array<FileInfo>;
+  items: Array<FileInfoListItem>;
   offset: Scalars['Int'];
   total: Scalars['Int'];
+};
+
+export type FileInfoListItem = FileInfo | FileInfoPartial;
+
+export type FileInfoPartial = {
+  __typename?: 'FileInfoPartial';
+  name: Scalars['String'];
 };
 
 export enum FileType {
@@ -129,19 +136,54 @@ export type FileInfoListQuery = {
   fileInfoList: {
     __typename?: 'FileInfoList';
     total: number;
-    items: Array<{
-      __typename?: 'FileInfo';
-      id: string;
-      name: string;
-      path: string;
-      type: FileType;
-      size: number;
-      sizeFormatted: string;
-      modifiedAt: any;
-    }>;
+    items: Array<
+      | {
+          __typename?: 'FileInfo';
+          id: string;
+          name: string;
+          path: string;
+          type: FileType;
+          size: number;
+          sizeFormatted: string;
+          modifiedAt: any;
+        }
+      | { __typename?: 'FileInfoPartial'; name: string }
+    >;
   };
 };
 
+export type FileInfoListItemFragment = {
+  __typename?: 'FileInfo';
+  id: string;
+  name: string;
+  path: string;
+  type: FileType;
+  size: number;
+  sizeFormatted: string;
+  modifiedAt: any;
+};
+
+export type FileInfoListItemPartialFragment = {
+  __typename?: 'FileInfoPartial';
+  name: string;
+};
+
+export const FileInfoListItemFragmentDoc = gql`
+  fragment FileInfoListItem on FileInfo {
+    id
+    name
+    path
+    type
+    size
+    sizeFormatted
+    modifiedAt
+  }
+`;
+export const FileInfoListItemPartialFragmentDoc = gql`
+  fragment FileInfoListItemPartial on FileInfoPartial {
+    name
+  }
+`;
 export const AuthorizeDocument = gql`
   mutation Authorize($username: String!, $password: String!) {
     authorize(username: $username, password: $password)
@@ -185,16 +227,17 @@ export const FileInfoListDocument = gql`
     fileInfoList(path: $path, offset: $offset, limit: $limit) {
       total
       items {
-        id
-        name
-        path
-        type
-        size
-        sizeFormatted
-        modifiedAt
+        ... on FileInfo {
+          ...FileInfoListItem
+        }
+        ... on FileInfoPartial {
+          ...FileInfoListItemPartial
+        }
       }
     }
   }
+  ${FileInfoListItemFragmentDoc}
+  ${FileInfoListItemPartialFragmentDoc}
 `;
 
 @Injectable({

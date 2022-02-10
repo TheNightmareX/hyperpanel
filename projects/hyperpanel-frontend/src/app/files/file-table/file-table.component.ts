@@ -4,6 +4,7 @@ import { NzTableSortFn } from 'ng-zorro-antd/table';
 import { Subscription } from 'rxjs';
 import {
   FileInfoListGQL,
+  FileInfoListItemFragment,
   FileInfoListQuery,
   FileInfoListQueryVariables,
   FileType,
@@ -12,9 +13,7 @@ import {
 import { FileTableMenuComponent } from '../file-table-menu/file-table-menu.component';
 import { FileTableNavigator } from './file-table-navigator.service';
 
-type FileInfo = FileInfoListQuery['fileInfoList']['items'][number];
-
-export interface FileTableItem extends FileInfo {
+export interface FileTableItem extends FileInfoListItemFragment {
   icon: string;
   modifiedAt: Date;
   typeFinalized: string | null;
@@ -41,7 +40,7 @@ export class FileTableComponent implements OnInit, OnDestroy {
   fileInfoListQuery?: QueryRef<FileInfoListQuery, FileInfoListQueryVariables>;
   private fileInfoListSubscription?: Subscription;
 
-  tracker: TrackByFunction<FileInfo> = (_, item): string => item.id;
+  tracker: TrackByFunction<FileTableItem> = (_, item): string => item.id;
   sorters: NzTableSortFn<FileTableItem>[] = [
     this.getSorter((a, b) => (a.name > b.name ? 1 : a.name < b.name ? -1 : 0)),
     this.getSorter((a, b) => a.modifiedAt.getTime() - b.modifiedAt.getTime()),
@@ -87,14 +86,19 @@ export class FileTableComponent implements OnInit, OnDestroy {
         this.loading = false;
         const { total, items } = result.data.fileInfoList;
         this.total = total;
-        this.items = items.map((item) => ({
-          ...item,
-          icon: item.type == FileType.Directory ? 'folder-open' : 'file-text',
-          modifiedAt: new Date(item.modifiedAt),
-          typeFinalized: item.type == FileType.Directory ? null : item.type,
-          sizeFinalized:
-            item.type == FileType.Directory ? null : item.sizeFormatted,
-        }));
+        this.items = items
+          .filter(
+            (item): item is FileInfoListItemFragment =>
+              !!(item as FileInfoListItemFragment).id,
+          )
+          .map((item) => ({
+            ...item,
+            icon: item.type == FileType.Directory ? 'folder-open' : 'file-text',
+            modifiedAt: new Date(item.modifiedAt),
+            typeFinalized: item.type == FileType.Directory ? null : item.type,
+            sizeFinalized:
+              item.type == FileType.Directory ? null : item.sizeFormatted,
+          }));
         this.itemsChecked.clear();
       });
   }
