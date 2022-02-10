@@ -37,12 +37,11 @@ type FileTableItemEntry = [number, FileTableItem];
 })
 export class FileTableComponent implements OnInit, OnDestroy {
   path = '/';
+  page = 1;
+  size = 100;
 
   items: FileTableItem[] = [];
   itemsChecked = new Set<FileTableItem>();
-
-  page = 1;
-  size = 100;
   total?: number;
   loading = false;
 
@@ -59,7 +58,8 @@ export class FileTableComponent implements OnInit, OnDestroy {
     ),
   ];
 
-  @ViewChild(NzTableComponent) private table!: NzTableComponent<FileTableItem>;
+  @ViewChild(NzTableComponent)
+  private table!: NzTableComponent<FileTableItem>;
   private tableDataIndexLastClicked = 0;
 
   private fileInfoListQuery?: QueryRef<
@@ -78,7 +78,7 @@ export class FileTableComponent implements OnInit, OnDestroy {
     this.navigator.path$.subscribe((path) => {
       this.path = path;
       this.page = 1;
-      this.query();
+      this.updateQuery();
     });
   }
 
@@ -86,49 +86,15 @@ export class FileTableComponent implements OnInit, OnDestroy {
     this.fileInfoListSubscription?.unsubscribe();
   }
 
-  query(): void {
-    if (this.loading) return;
+  handlePageChange(value: number): void {
+    this.page = value;
+    this.updateQuery();
+  }
 
-    const offset = (this.page - 1) * this.size;
-    this.fileInfoListQuery = this.fileInfoListGql.watch({
-      path: this.path,
-      offset,
-      limit: this.size,
-    });
-
-    this.itemsChecked.clear();
-    this.tableDataIndexLastClicked = 0;
-
-    this.loading = true;
-    this.fileInfoListSubscription?.unsubscribe();
-    this.fileInfoListSubscription =
-      this.fileInfoListQuery.valueChanges.subscribe({
-        next: (result) => {
-          this.loading = false;
-          const { total, items } = result.data.fileInfoList;
-          this.total = total;
-          this.items = items
-            .filter(
-              (item): item is FileInfoListItemFragment =>
-                !!(item as FileInfoListItemFragment).id,
-            )
-            .map((item) => ({
-              ...item,
-              icon:
-                item.type == FileType.Directory ? 'folder-open' : 'file-text',
-              modifiedAt: new Date(item.modifiedAt),
-              typeFinalized: item.type == FileType.Directory ? null : item.type,
-              sizeFinalized:
-                item.type == FileType.Directory ? null : item.sizeFormatted,
-            }));
-        },
-        error: (err) => {
-          this.loading = false;
-          this.messageService.error(`Query files failed: ${err.message}`);
-          if (this.navigator.canBackward) this.navigator.backward();
-          else this.navigator.navigate('/');
-        },
-      });
+  handleSizeChange(value: number): void {
+    this.size = value;
+    this.page = 1;
+    this.updateQuery();
   }
 
   /**
@@ -202,6 +168,50 @@ export class FileTableComponent implements OnInit, OnDestroy {
   setAllItemsCheckedStatus(checked: boolean): void {
     if (checked) this.items.forEach((item) => this.itemsChecked.add(item));
     else this.itemsChecked.clear();
+  }
+
+  private updateQuery(): void {
+    if (this.loading) return;
+
+    const offset = (this.page - 1) * this.size;
+    this.fileInfoListQuery = this.fileInfoListGql.watch({
+      path: this.path,
+      offset,
+      limit: this.size,
+    });
+
+    this.loading = true;
+    this.fileInfoListSubscription?.unsubscribe();
+    this.fileInfoListSubscription =
+      this.fileInfoListQuery.valueChanges.subscribe({
+        next: (result) => {
+          this.loading = false;
+          this.itemsChecked.clear();
+          this.tableDataIndexLastClicked = 0;
+          const { total, items } = result.data.fileInfoList;
+          this.total = total;
+          this.items = items
+            .filter(
+              (item): item is FileInfoListItemFragment =>
+                !!(item as FileInfoListItemFragment).id,
+            )
+            .map((item) => ({
+              ...item,
+              icon:
+                item.type == FileType.Directory ? 'folder-open' : 'file-text',
+              modifiedAt: new Date(item.modifiedAt),
+              typeFinalized: item.type == FileType.Directory ? null : item.type,
+              sizeFinalized:
+                item.type == FileType.Directory ? null : item.sizeFormatted,
+            }));
+        },
+        error: (err) => {
+          this.loading = false;
+          this.messageService.error(`Query files failed: ${err.message}`);
+          if (this.navigator.canBackward) this.navigator.backward();
+          else this.navigator.navigate('/');
+        },
+      });
   }
 
   /**
