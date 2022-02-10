@@ -4,8 +4,11 @@ import * as fs from 'fs';
 import * as fsPromises from 'fs/promises';
 import * as pathLib from 'path';
 
-import { FileInfo } from './entities/file-info.entity';
-import { FileInfoList } from './entities/file-info-list.entity';
+import { FileInfo, FileInfoPartial } from './entities/file-info.entity';
+import {
+  FileInfoList,
+  FileInfoListItem,
+} from './entities/file-info-list.entity';
 import { FileType } from './entities/file-type.enum';
 
 @Injectable()
@@ -38,15 +41,17 @@ export class FilesService {
     offset = 0,
     limit = 20,
   ): Promise<FileInfoList> {
-    const filenames = await fsPromises.readdir(path);
-    const filenamesSliced = filenames.slice(offset, offset + limit);
-    const filepaths = filenamesSliced.map((filename) =>
-      pathLib.join(path, filename),
+    const filenamesAll = await fsPromises.readdir(path);
+    const filenames = filenamesAll.slice(offset, offset + limit);
+    const filepaths = filenames.map((filename) => pathLib.join(path, filename));
+    const tasks: Promise<typeof FileInfoListItem>[] = filepaths.map(
+      (path, index) =>
+        this.getFileInfo(path).catch(() =>
+          this.instantiate(FileInfoPartial, { name: filenames[index] }),
+        ),
     );
-    const items = await Promise.all(
-      filepaths.map((path) => this.getFileInfo(path)),
-    );
-    return { offset, total: filenames.length, items };
+    const results = await Promise.all(tasks);
+    return { offset, total: filenamesAll.length, items: results };
   }
 
   async createFile(path: string, isDirectory = false): Promise<FileInfo> {

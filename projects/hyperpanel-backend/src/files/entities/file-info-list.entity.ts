@@ -1,6 +1,11 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { createUnionType, Field, ObjectType } from '@nestjs/graphql';
 
-import { FileInfo } from './file-info.entity';
+import { FileInfo, FileInfoPartial } from './file-info.entity';
+
+export const FileInfoListItem = createUnionType({
+  name: 'FileInfoListItem',
+  types: () => [FileInfo, FileInfoPartial],
+});
 
 @ObjectType()
 export class FileInfoList {
@@ -10,6 +15,6 @@ export class FileInfoList {
   @Field()
   total: number;
 
-  @Field(() => [FileInfo])
-  items: FileInfo[];
+  @Field(() => [FileInfoListItem])
+  items: typeof FileInfoListItem[];
 }

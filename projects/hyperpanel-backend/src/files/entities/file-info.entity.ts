@@ -31,3 +31,9 @@ export class FileInfo {
   @Field()
   modifiedAt: Date;
 }
+
+@ObjectType()
+export class FileInfoPartial {
+  @Field()
+  name: string;
+}
