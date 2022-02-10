@@ -21,6 +21,8 @@ export interface FileTableItem extends FileInfoListItemFragment {
   sizeFinalized: string | null;
 }
 
+type FileTableItemEntry = [number, FileTableItem];
+
 @Component({
   selector: 'app-file-table',
   templateUrl: './file-table.component.html',
@@ -41,7 +43,8 @@ export class FileTableComponent implements OnInit, OnDestroy {
   fileInfoListQuery?: QueryRef<FileInfoListQuery, FileInfoListQueryVariables>;
   private fileInfoListSubscription?: Subscription;
 
-  tracker: TrackByFunction<FileTableItem> = (_, item): string => item.id;
+  tracker: TrackByFunction<FileTableItemEntry> = (...[, [, item]]): string =>
+    item.id;
   sorters: NzTableSortFn<FileTableItem>[] = [
     this.getSorter((a, b) => (a.name > b.name ? 1 : a.name < b.name ? -1 : 0)),
     this.getSorter((a, b) => a.modifiedAt.getTime() - b.modifiedAt.getTime()),
