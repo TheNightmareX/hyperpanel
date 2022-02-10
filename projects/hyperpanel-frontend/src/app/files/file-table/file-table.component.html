@@ -28,7 +28,7 @@
     <tbody>
       <tr
         *ngFor="let entry of table.data.entries(); trackBy: tracker"
-        (click)="handleItemClick(entry[1], $event)"
+        (click)="handleItemClick(entry[0], entry[1], $event)"
         (dblclick)="openItem(entry[1])"
         (contextmenu)="openMenu(entry[1], $event, menu)"
       >

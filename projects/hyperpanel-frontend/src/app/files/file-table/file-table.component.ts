@@ -1,7 +1,13 @@
-import { Component, OnDestroy, OnInit, TrackByFunction } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  TrackByFunction,
+  ViewChild,
+} from '@angular/core';
 import { QueryRef } from 'apollo-angular';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzTableSortFn } from 'ng-zorro-antd/table';
+import { NzTableComponent, NzTableSortFn } from 'ng-zorro-antd/table';
 import { Subscription } from 'rxjs';
 import {
   FileInfoListGQL,
@@ -55,6 +61,9 @@ export class FileTableComponent implements OnInit, OnDestroy {
         (b.type == FileType.File ? b.size : 0),
     ),
   ];
+
+  @ViewChild(NzTableComponent) private table!: NzTableComponent<FileTableItem>;
+  private tableDataIndexLastClicked = 0;
 
   constructor(
     private messageService: NzMessageService,
@@ -117,7 +126,11 @@ export class FileTableComponent implements OnInit, OnDestroy {
       });
   }
 
-  handleItemClick(item: FileTableItem, $event: MouseEvent): void {
+  handleItemClick(
+    index: number,
+    item: FileTableItem,
+    $event: MouseEvent,
+  ): void {
     const ctrl = $event.ctrlKey;
     const shift = $event.shiftKey;
     if (ctrl && shift) {
@@ -127,12 +140,19 @@ export class FileTableComponent implements OnInit, OnDestroy {
       const checked = this.getItemCheckedStatus(item);
       this.setItemCheckedStatus(item, !checked);
     } else if (shift) {
-      // TODO: implement
+      const indexLast = this.tableDataIndexLastClicked;
+      const itemsCovered = this.table.data.slice(
+        ...(indexLast < index
+          ? [indexLast, index + 1]
+          : [index, indexLast + 1]),
+      );
+      itemsCovered.forEach((item) => this.setItemCheckedStatus(item, true));
     } else {
       // Select only the clicked item.
       this.setAllItemsCheckedStatus(false);
       this.setItemCheckedStatus(item, true);
     }
+    this.tableDataIndexLastClicked = index;
   }
 
   openItem(item: FileTableItem): void {
