@@ -139,15 +139,11 @@ export class FileTableComponent implements OnInit, OnDestroy {
    *
    * @param index
    * @param item
-   * @param $event
+   * @param event
    */
-  handleItemClick(
-    index: number,
-    item: FileTableItem,
-    $event: MouseEvent,
-  ): void {
-    const ctrl = $event.ctrlKey;
-    const shift = $event.shiftKey;
+  handleItemClick(index: number, item: FileTableItem, event: MouseEvent): void {
+    const ctrl = event.ctrlKey;
+    const shift = event.shiftKey;
     // TODO: optimize implementation
     if (shift) {
       if (!ctrl) this.setAllItemsCheckedStatus(false);
