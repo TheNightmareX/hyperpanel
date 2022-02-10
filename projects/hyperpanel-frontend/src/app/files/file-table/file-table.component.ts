@@ -96,14 +96,15 @@ export class FileTableComponent implements OnInit, OnDestroy {
       limit: this.size,
     });
 
+    this.itemsChecked.clear();
+    this.tableDataIndexLastClicked = 0;
+
     this.loading = true;
     this.fileInfoListSubscription?.unsubscribe();
     this.fileInfoListSubscription =
       this.fileInfoListQuery.valueChanges.subscribe({
         next: (result) => {
           this.loading = false;
-          this.itemsChecked.clear();
-          this.tableDataIndexLastClicked = 0;
           const { total, items } = result.data.fileInfoList;
           this.total = total;
           this.items = items
