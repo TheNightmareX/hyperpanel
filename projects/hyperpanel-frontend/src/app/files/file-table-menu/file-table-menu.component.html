@@ -1,6 +1,6 @@
 <nz-dropdown-menu>
   <ul nz-menu>
-    <li nz-menu-item (click)="openTarget()">
+    <li nz-menu-item (click)="openTarget()" *ngIf="target">
       <i nz-icon nzType="select"></i>
       <span>Open</span>
     </li>
