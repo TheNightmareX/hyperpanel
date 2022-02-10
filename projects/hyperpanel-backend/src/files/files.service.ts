@@ -15,9 +15,10 @@ import { FileType } from './entities/file-type.enum';
 export class FilesService {
   async getFileInfo(path: string, accurate = false): Promise<FileInfo> {
     const stats = await fsPromises.stat(path);
+    const statsL = await fsPromises.lstat(path);
 
     const info = this.instantiate(FileInfo, {
-      id: this.getFileId(stats),
+      id: this.getFileId(statsL),
       name: pathLib.basename(path),
       path,
       realpath: await this.getRealpath(path),
