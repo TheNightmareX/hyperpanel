@@ -31,4 +31,8 @@ export class AuthService {
       tap(() => this.token.next(null).save()),
     );
   }
+
+  getRequestHeaders(): Record<string, string> {
+    return { ['Authorization']: `Bearer ${this.token.value}` };
+  }
 }

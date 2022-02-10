@@ -17,11 +17,9 @@ export class GraphqlAuthInterceptor implements HttpInterceptor {
     request: HttpRequest<unknown>,
     next: HttpHandler,
   ): Observable<HttpEvent<unknown>> {
-    const token = this.authService.token.value;
-    if (token)
-      request = request.clone({
-        setHeaders: { Authorization: `Bearer ${token}` },
-      });
+    request = request.clone({
+      setHeaders: this.authService.getRequestHeaders(),
+    });
     return next.handle(request);
   }
 }
