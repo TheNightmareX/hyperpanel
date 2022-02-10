@@ -12,6 +12,7 @@ import {
 } from '@ant-design/icons-angular/icons';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
@@ -51,6 +52,7 @@ const icons: IconDefinition[] = [
     NzBreadCrumbModule,
     NzButtonModule,
     NzSpaceModule,
+    NzDividerModule,
   ],
 })
 export class FilesModule {}

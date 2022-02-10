@@ -47,19 +47,26 @@
     </tbody>
   </nz-table>
 
-  <nz-pagination
-    class="table-pagination"
-    nzResponsive
-    nzShowSizeChanger
-    [nzPageSizeOptions]="[50, 100, 200, 500, 1000, 2000]"
-    nzShowQuickJumper
-    [(nzPageIndex)]="page"
-    [(nzPageSize)]="size"
-    [nzTotal]="total"
-    (nzPageIndexChange)="query()"
-    (nzPageSizeChange)="page = 1; query()"
-    [nzDisabled]="loading"
-  ></nz-pagination>
+  <div class="table-footer">
+    <div class="table-info">
+      <span>{{ total }} items</span>
+      <nz-divider nzType="vertical"></nz-divider>
+      <span>{{ itemsChecked.size }} selected</span>
+    </div>
+
+    <nz-pagination
+      nzResponsive
+      nzShowSizeChanger
+      [nzPageSizeOptions]="[50, 100, 200, 500, 1000, 2000]"
+      nzShowQuickJumper
+      [(nzPageIndex)]="page"
+      [(nzPageSize)]="size"
+      [nzTotal]="total"
+      (nzPageIndexChange)="query()"
+      (nzPageSizeChange)="page = 1; query()"
+      [nzDisabled]="loading"
+    ></nz-pagination>
+  </div>
 </div>
 
 <app-file-table-menu [targets]="itemsChecked" #menu></app-file-table-menu>
