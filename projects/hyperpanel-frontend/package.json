@@ -26,6 +26,7 @@
     "graphql": "^15.0.0",
     "ng-zorro-antd": "^13.0.1",
     "rxjs": "~7.4.0",
+    "streamsaver": "^2.0.5",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
   },
@@ -39,6 +40,7 @@
     "@graphql-codegen/typescript-operations": "^2.2.4",
     "@types/jasmine": "~3.10.0",
     "@types/node": "^12.11.1",
+    "@types/streamsaver": "^2.0.1",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
     "eslint": "^8.0.1",
