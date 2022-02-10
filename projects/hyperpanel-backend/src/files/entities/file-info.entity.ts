@@ -11,9 +11,6 @@ export class FileInfo {
   name: string;
 
   @Field()
-  dirname: string;
-
-  @Field()
   path: string;
 
   @Field({ nullable: true })
@@ -36,4 +33,7 @@ export class FileInfo {
 export class FileInfoPartial {
   @Field()
   name: string;
+
+  @Field()
+  path: string;
 }

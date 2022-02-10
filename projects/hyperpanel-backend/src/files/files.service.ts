@@ -19,7 +19,6 @@ export class FilesService {
     const info = this.instantiate(FileInfo, {
       id: this.getFileId(stats),
       name: pathLib.basename(path),
-      dirname: pathLib.dirname(path),
       path,
       realpath: await this.getRealpath(path),
       type: this.getFileType(stats),
@@ -47,7 +46,10 @@ export class FilesService {
     const tasks: Promise<typeof FileInfoListItem>[] = filepaths.map(
       (path, index) =>
         this.getFileInfo(path).catch(() =>
-          this.instantiate(FileInfoPartial, { name: filenames[index] }),
+          this.instantiate(FileInfoPartial, {
+            name: filenames[index],
+            path: filepaths[index],
+          }),
         ),
     );
     const results = await Promise.all(tasks);
