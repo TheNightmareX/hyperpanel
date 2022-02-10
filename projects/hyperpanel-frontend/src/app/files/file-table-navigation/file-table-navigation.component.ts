@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { FileTableNavigator } from '../file-table/file-table-navigator.service';
 
@@ -13,16 +13,15 @@ interface FileTableNavigationItem {
   styleUrls: ['./file-table-navigation.component.less'],
 })
 export class FileTableNavigationComponent implements OnInit {
-  @Input()
-  set path(value: string) {
-    this.items = this.parsePath(value);
-  }
-
   items: FileTableNavigationItem[] = [];
 
   constructor(public navigator: FileTableNavigator) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.navigator.path$.subscribe((path) => {
+      this.items = this.parsePath(path);
+    });
+  }
 
   parsePath(path: string): FileTableNavigationItem[] {
     const segments = path.split('/').filter((v) => !!v);
