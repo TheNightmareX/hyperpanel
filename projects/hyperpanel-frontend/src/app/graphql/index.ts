@@ -114,16 +114,16 @@ export type QueryFileInfoListArgs = {
   path: Scalars['String'];
 };
 
+export type AuthorizedQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AuthorizedQuery = { __typename?: 'Query'; authorized: boolean };
+
 export type AuthorizeMutationVariables = Exact<{
   username: Scalars['String'];
   password: Scalars['String'];
 }>;
 
 export type AuthorizeMutation = { __typename?: 'Mutation'; authorize: string };
-
-export type AuthorizedQueryVariables = Exact<{ [key: string]: never }>;
-
-export type AuthorizedQuery = { __typename?: 'Query'; authorized: boolean };
 
 export type FileInfoListQueryVariables = Exact<{
   path: Scalars['String'];
@@ -184,25 +184,6 @@ export const FileInfoListItemPartialFragmentDoc = gql`
     name
   }
 `;
-export const AuthorizeDocument = gql`
-  mutation Authorize($username: String!, $password: String!) {
-    authorize(username: $username, password: $password)
-  }
-`;
-
-@Injectable({
-  providedIn: 'root',
-})
-export class AuthorizeGQL extends Apollo.Mutation<
-  AuthorizeMutation,
-  AuthorizeMutationVariables
-> {
-  document = AuthorizeDocument;
-
-  constructor(apollo: Apollo.Apollo) {
-    super(apollo);
-  }
-}
 export const AuthorizedDocument = gql`
   query Authorized {
     authorized
@@ -217,6 +198,25 @@ export class AuthorizedGQL extends Apollo.Query<
   AuthorizedQueryVariables
 > {
   document = AuthorizedDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const AuthorizeDocument = gql`
+  mutation Authorize($username: String!, $password: String!) {
+    authorize(username: $username, password: $password)
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AuthorizeGQL extends Apollo.Mutation<
+  AuthorizeMutation,
+  AuthorizeMutationVariables
+> {
+  document = AuthorizeDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
