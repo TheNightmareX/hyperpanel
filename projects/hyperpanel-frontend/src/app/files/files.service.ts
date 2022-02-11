@@ -11,12 +11,12 @@ export class FilesService {
   constructor(private authService: AuthService) {}
 
   // TODO: cancel the streams when user canceled the download.
-  async save(path: string, name: string): Promise<void> {
+  async save(path: string, name: string, size?: number): Promise<void> {
     const url = `${environment.serverUrl}/files${path}`;
     const response = await fetch(url, {
       headers: this.authService.getRequestHeaders(),
     });
-    const writableStream = streamSaver.createWriteStream(name);
+    const writableStream = streamSaver.createWriteStream(name, { size });
     return response.body?.pipeTo(writableStream);
   }
 }

@@ -47,6 +47,10 @@ export class FileTableMenuComponent implements OnInit {
 
   saveTarget(): void {
     if (!this.target) return;
-    this.filesService.save(this.target.path, this.target.name);
+    this.filesService.save(
+      this.target.path,
+      this.target.name,
+      this.target.size,
+    );
   }
 }
