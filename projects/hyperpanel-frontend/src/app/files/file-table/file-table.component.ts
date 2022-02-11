@@ -143,7 +143,6 @@ export class FileTableComponent implements OnInit, OnDestroy {
   ): void {
     if (!this.getItemCheckedStatus(item)) {
       this.setAllItemsCheckedStatus(false);
-      this.setItemCheckedStatus(item, true);
     }
     menu.open(event);
   }
