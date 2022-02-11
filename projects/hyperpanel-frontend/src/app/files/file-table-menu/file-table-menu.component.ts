@@ -11,21 +11,19 @@ import {
 } from '../file-table/file-table.component';
 import { FilesService } from '../files.service';
 
+export interface FileTableMenuItem {
+  text: string;
+  icon?: string;
+  handler: () => void;
+}
+
 @Component({
   selector: 'app-file-table-menu',
   templateUrl: './file-table-menu.component.html',
   styleUrls: ['./file-table-menu.component.less'],
 })
 export class FileTableMenuComponent implements OnInit {
-  FileType = FileType;
-
-  get targets(): Set<FileTableItem> {
-    return this.table.itemsChecked;
-  }
-
-  get target(): FileTableItem | null {
-    return this.targets.size == 1 ? this.targets.values().next().value : null;
-  }
+  items: FileTableMenuItem[] = [];
 
   @ViewChild(NzDropdownMenuComponent)
   private menu!: NzDropdownMenuComponent;
@@ -40,19 +38,35 @@ export class FileTableMenuComponent implements OnInit {
 
   open(event: MouseEvent): void {
     this.menuService.create(event, this.menu);
+    this.items = this.generateItems(this.table.itemsChecked);
   }
 
-  openTarget(): void {
-    if (!this.target) return;
-    this.table.openItem(this.target);
-  }
+  private generateItems(targets: Set<FileTableItem>): FileTableMenuItem[] {
+    if (!targets.size) {
+      // nothing selected
+      return [];
+    } else if (targets.size == 1) {
+      // one item selected
+      const target = targets.values().next().value;
 
-  saveTarget(): void {
-    if (!this.target) return;
-    this.filesService.save(
-      this.target.path,
-      this.target.name,
-      this.target.size,
-    );
+      const itemOpen: FileTableMenuItem = {
+        text: 'Open',
+        icon: 'select',
+        handler: () => this.table.openItem(target),
+      };
+      const itemDownload: FileTableMenuItem = {
+        text: 'Download',
+        icon: 'download',
+        handler: () =>
+          this.filesService.save(target.path, target.name, target.size),
+      };
+
+      return target.type == FileType.Directory
+        ? [itemOpen]
+        : [itemOpen, itemDownload];
+    } else {
+      // multiple items selected
+      return [];
+    }
   }
 }

@@ -1,16 +1,8 @@
 <nz-dropdown-menu>
   <ul nz-menu>
-    <li nz-menu-item (click)="openTarget()" *ngIf="target">
-      <i nz-icon nzType="select"></i>
-      <span>Open</span>
-    </li>
-    <li
-      nz-menu-item
-      (click)="saveTarget()"
-      *ngIf="target && target.type == FileType.File"
-    >
-      <i nz-icon nzType="download"></i>
-      <span>Download</span>
+    <li nz-menu-item *ngFor="let item of items" (click)="item.handler()">
+      <i nz-icon *ngIf="item.icon" [nzType]="item.icon"></i>
+      <span> {{ item.text }} </span>
     </li>
   </ul>
 </nz-dropdown-menu>
