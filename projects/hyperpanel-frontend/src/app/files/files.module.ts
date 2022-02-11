@@ -24,6 +24,7 @@ import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 import { NzTableModule } from 'ng-zorro-antd/table';
 
 import { FileTableComponent } from './file-table/file-table.component';
+import { FileTableActionsComponent } from './file-table-actions/file-table-actions.component';
 import { FileTableMenuComponent } from './file-table-menu/file-table-menu.component';
 import { FileTableNavigationComponent } from './file-table-navigation/file-table-navigation.component';
 import { FilesComponent } from './files.component';
@@ -47,6 +48,7 @@ const icons: IconDefinition[] = [
     FileTableComponent,
     FileTableMenuComponent,
     FileTableNavigationComponent,
+    FileTableActionsComponent,
   ],
   imports: [
     CommonModule,
