@@ -1,8 +1,12 @@
 <nz-dropdown-menu>
   <ul nz-menu>
     <li nz-menu-item *ngFor="let item of items" (click)="item.handler()">
-      <i nz-icon *ngIf="item.icon" [nzType]="item.icon"></i>
-      <span> {{ item.text }} </span>
+      <span class="icon">
+        <i nz-icon *ngIf="item.icon" [nzType]="item.icon"></i>
+      </span>
+      <span class="text">
+        {{ item.text }}
+      </span>
     </li>
   </ul>
 </nz-dropdown-menu>
