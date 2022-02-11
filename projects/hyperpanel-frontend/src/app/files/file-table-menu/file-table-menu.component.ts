@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   NzContextMenuService,
   NzDropdownMenuComponent,
@@ -19,7 +19,9 @@ import { FilesService } from '../files.service';
 export class FileTableMenuComponent implements OnInit {
   FileType = FileType;
 
-  @Input() targets = new Set<FileTableItem>();
+  get targets(): Set<FileTableItem> {
+    return this.table.itemsChecked;
+  }
 
   get target(): FileTableItem | null {
     return this.targets.size == 1 ? this.targets.values().next().value : null;
