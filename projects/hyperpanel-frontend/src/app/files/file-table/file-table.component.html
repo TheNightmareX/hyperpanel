@@ -26,19 +26,19 @@
     </thead>
     <tbody>
       <tr
-        *ngFor="let entry of table.data.entries(); trackBy: tracker"
-        (click)="handleItemClick(entry[0], entry[1], $event)"
-        (dblclick)="openItem(entry[1])"
-        (contextmenu)="openMenu(entry[1], $event, menu)"
+        *ngFor="let item of table.data; trackBy: tracker; let i = index"
+        (click)="handleItemClick(i, item, $event)"
+        (dblclick)="openItem(item)"
+        (contextmenu)="openMenu(item, $event, menu)"
       >
-        <td [(nzChecked)]="entry[1].checked"></td>
+        <td [(nzChecked)]="item.checked"></td>
         <td>
-          <i nz-icon [nzType]="entry[1].icon"></i>
-          <span>{{ entry[1].name }}</span>
+          <i nz-icon [nzType]="item.icon"></i>
+          <span>{{ item.name }}</span>
         </td>
-        <td>{{ entry[1].modifiedAt | date: 'yyyy/MM/dd HH:mm:ss' }}</td>
-        <td>{{ entry[1].typeFinalized }}</td>
-        <td>{{ entry[1].sizeFinalized }}</td>
+        <td>{{ item.modifiedAt | date: 'yyyy/MM/dd HH:mm:ss' }}</td>
+        <td>{{ item.typeFinalized }}</td>
+        <td>{{ item.sizeFinalized }}</td>
       </tr>
     </tbody>
   </nz-table>
