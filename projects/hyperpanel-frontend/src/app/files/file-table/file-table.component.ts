@@ -41,22 +41,6 @@ export class FileTableComponent implements OnInit, OnDestroy {
 
   private subscription?: Subscription;
 
-  get tableChecked(): boolean {
-    return (
-      !!this.itemsChecked.size && this.itemsChecked.size == this.items.length
-    );
-  }
-  set tableChecked(v: boolean) {
-    if (v) this.items.forEach((item) => this.itemsChecked.add(item));
-    else this.itemsChecked.clear();
-  }
-
-  get tableIndeterminate(): boolean {
-    return (
-      !!this.itemsChecked.size && this.itemsChecked.size != this.items.length
-    );
-  }
-
   constructor(
     public sorter: FileTableSorter,
     private notifier: NzMessageService,
@@ -74,6 +58,14 @@ export class FileTableComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscription?.unsubscribe();
+  }
+
+  checkAll(): void {
+    this.items.forEach((item) => this.itemsChecked.add(item));
+  }
+
+  checkNone(): void {
+    this.itemsChecked.clear();
   }
 
   handleQueryParamChange(): void {
@@ -134,7 +126,7 @@ export class FileTableComponent implements OnInit, OnDestroy {
     const shift = event.shiftKey;
     // TODO: optimize implementation
     if (shift) {
-      if (!ctrl) this.tableChecked = false;
+      if (!ctrl) this.checkNone();
       const indexLast = this.itemIndexLastClicked;
       const itemsCovered = items.slice(
         ...(indexLast < index
@@ -145,7 +137,7 @@ export class FileTableComponent implements OnInit, OnDestroy {
     } else if (ctrl) {
       item.checked = !item.checked;
     } else {
-      this.tableChecked = false;
+      this.checkNone();
       item.checked = true;
     }
     this.itemIndexLastClicked = index;
@@ -160,8 +152,7 @@ export class FileTableComponent implements OnInit, OnDestroy {
     event: MouseEvent,
     menu: FileTableMenuComponent,
   ): void {
-    if (!item.checked) this.tableChecked = false;
-
+    if (!item.checked) this.checkNone();
     menu.open(event);
   }
 

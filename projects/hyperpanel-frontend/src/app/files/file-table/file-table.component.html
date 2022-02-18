@@ -15,8 +15,11 @@
     <thead>
       <tr>
         <th
-          [(nzChecked)]="tableChecked"
-          [nzIndeterminate]="tableIndeterminate"
+          [nzChecked]="!!itemsChecked.size && itemsChecked.size == items.length"
+          [nzIndeterminate]="
+            !!itemsChecked.size && itemsChecked.size != items.length
+          "
+          (nzCheckedChange)="$event ? checkAll() : checkNone()"
         ></th>
         <th [nzSortFn]="sorter.for('name')" nzSortOrder="ascend">Name</th>
         <th [nzSortFn]="sorter.for('modifiedAt')">Modified At</th>
