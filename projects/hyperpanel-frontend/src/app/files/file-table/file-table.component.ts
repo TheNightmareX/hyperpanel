@@ -1,13 +1,7 @@
-import {
-  Component,
-  OnDestroy,
-  OnInit,
-  TrackByFunction,
-  ViewChild,
-} from '@angular/core';
+import { Component, OnDestroy, OnInit, TrackByFunction } from '@angular/core';
 import { QueryRef } from 'apollo-angular';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzTableComponent, NzTableSortFn } from 'ng-zorro-antd/table';
+import { NzTableSortFn } from 'ng-zorro-antd/table';
 import { Subscription } from 'rxjs';
 import { defineAccessor } from 'src/app/common/utilities';
 import {
@@ -73,8 +67,6 @@ export class FileTableComponent implements OnInit, OnDestroy {
     ),
   ];
 
-  @ViewChild(NzTableComponent)
-  private table!: NzTableComponent<FileTableItem>;
   private tableDataIndexLastClicked = 0;
 
   private fileInfoListQuery?: QueryRef<
@@ -124,14 +116,19 @@ export class FileTableComponent implements OnInit, OnDestroy {
    * @param item
    * @param event
    */
-  handleItemClick(index: number, item: FileTableItem, event: MouseEvent): void {
+  handleItemClick(
+    index: number,
+    item: FileTableItem,
+    items: readonly FileTableItem[],
+    event: MouseEvent,
+  ): void {
     const ctrl = event.ctrlKey;
     const shift = event.shiftKey;
     // TODO: optimize implementation
     if (shift) {
       if (!ctrl) this.tableChecked = false;
       const indexLast = this.tableDataIndexLastClicked;
-      const itemsCovered = this.table.data.slice(
+      const itemsCovered = items.slice(
         ...(indexLast < index
           ? [indexLast, index + 1]
           : [index, indexLast + 1]),
