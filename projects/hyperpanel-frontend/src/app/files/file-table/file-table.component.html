@@ -18,10 +18,10 @@
           [(nzChecked)]="tableChecked"
           [nzIndeterminate]="tableIndeterminate"
         ></th>
-        <th [nzSortFn]="sorters[0]" nzSortOrder="ascend">Name</th>
-        <th [nzSortFn]="sorters[1]">Modified At</th>
-        <th [nzSortFn]="sorters[2]">Type</th>
-        <th [nzSortFn]="sorters[3]">Size</th>
+        <th [nzSortFn]="sorter.for('name')" nzSortOrder="ascend">Name</th>
+        <th [nzSortFn]="sorter.for('modifiedAt')">Modified At</th>
+        <th [nzSortFn]="sorter.for('type')">Type</th>
+        <th [nzSortFn]="sorter.for('size')">Size</th>
       </tr>
     </thead>
     <tbody>

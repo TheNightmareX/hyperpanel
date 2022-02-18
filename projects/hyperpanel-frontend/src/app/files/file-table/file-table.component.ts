@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit, TrackByFunction } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzTableSortFn } from 'ng-zorro-antd/table';
 import { Subscription } from 'rxjs';
 import { defineAccessor } from 'src/app/common/utilities';
 import {
@@ -11,6 +10,7 @@ import {
 
 import { FileTableMenuComponent } from '../file-table-menu/file-table-menu.component';
 import { FileTableNavigator } from './file-table-navigator.service';
+import { FileTableSorter } from './file-table-sorter.service';
 
 export interface FileTableItem extends FileInfoListItemFragment {
   icon: string;
@@ -24,7 +24,7 @@ export interface FileTableItem extends FileInfoListItemFragment {
   selector: 'app-file-table',
   templateUrl: './file-table.component.html',
   styleUrls: ['./file-table.component.less'],
-  providers: [FileTableNavigator],
+  providers: [FileTableNavigator, FileTableSorter],
 })
 export class FileTableComponent implements OnInit, OnDestroy {
   path = '/';
@@ -53,22 +53,13 @@ export class FileTableComponent implements OnInit, OnDestroy {
   }
 
   tracker: TrackByFunction<FileTableItem> = (...[, item]): string => item.id;
-  sorters: NzTableSortFn<FileTableItem>[] = [
-    this.getSorter((a, b) => (a.name > b.name ? 1 : a.name < b.name ? -1 : 0)),
-    this.getSorter((a, b) => a.modifiedAt.getTime() - b.modifiedAt.getTime()),
-    this.getSorter((a, b) => (a.type > b.type ? 1 : a.type < b.type ? -1 : 0)),
-    this.getSorter(
-      (a, b) =>
-        (a.type == FileType.File ? a.size : 0) -
-        (b.type == FileType.File ? b.size : 0),
-    ),
-  ];
 
   private tableDataIndexLastClicked = 0;
 
   private subscription?: Subscription;
 
   constructor(
+    public sorter: FileTableSorter,
     private messageService: NzMessageService,
     private navigator: FileTableNavigator,
     private fileInfoListGql: FileInfoListGQL,
@@ -184,24 +175,6 @@ export class FileTableComponent implements OnInit, OnDestroy {
           else this.navigator.navigate('/');
         },
       });
-  }
-
-  /**
-   * Ensure that directories are always sorted before files.
-   * @param base
-   * @returns
-   */
-  private getSorter(
-    base: NzTableSortFn<FileTableItem>,
-  ): NzTableSortFn<FileTableItem> {
-    return (a, b) =>
-      a.type != b.type
-        ? a.type == FileType.Directory
-          ? -1
-          : b.type == FileType.Directory
-          ? 1
-          : base(a, b)
-        : base(a, b);
   }
 
   private parseItem(raw: FileInfoListItemFragment): FileTableItem {
