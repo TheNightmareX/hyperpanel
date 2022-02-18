@@ -15,9 +15,8 @@
     <thead>
       <tr>
         <th
-          [nzChecked]="!!getAllItemsCheckedStatus()"
-          [nzIndeterminate]="getAllItemsCheckedStatus() == null"
-          (nzCheckedChange)="setAllItemsCheckedStatus($event)"
+          [(nzChecked)]="tableChecked"
+          [nzIndeterminate]="tableIndeterminate"
         ></th>
         <th [nzSortFn]="sorters[0]" nzSortOrder="ascend">Name</th>
         <th [nzSortFn]="sorters[1]">Modified At</th>

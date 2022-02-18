@@ -47,6 +47,22 @@ export class FileTableComponent implements OnInit, OnDestroy {
   total?: number;
   loading = false;
 
+  get tableChecked(): boolean {
+    return (
+      !!this.itemsChecked.size && this.itemsChecked.size == this.items.length
+    );
+  }
+  set tableChecked(v: boolean) {
+    if (v) this.items.forEach((item) => this.itemsChecked.add(item));
+    else this.itemsChecked.clear();
+  }
+
+  get tableIndeterminate(): boolean {
+    return (
+      !!this.itemsChecked.size && this.itemsChecked.size != this.items.length
+    );
+  }
+
   tracker: TrackByFunction<FileTableItemEntry> = (...[, [, item]]): string =>
     item.id;
   sorters: NzTableSortFn<FileTableItem>[] = [
@@ -116,7 +132,7 @@ export class FileTableComponent implements OnInit, OnDestroy {
     const shift = event.shiftKey;
     // TODO: optimize implementation
     if (shift) {
-      if (!ctrl) this.setAllItemsCheckedStatus(false);
+      if (!ctrl) this.tableChecked = false;
       const indexLast = this.tableDataIndexLastClicked;
       const itemsCovered = this.table.data.slice(
         ...(indexLast < index
@@ -127,7 +143,7 @@ export class FileTableComponent implements OnInit, OnDestroy {
     } else if (ctrl) {
       item.checked = !item.checked;
     } else {
-      this.setAllItemsCheckedStatus(false);
+      this.tableChecked = false;
       item.checked = true;
     }
     this.tableDataIndexLastClicked = index;
@@ -142,23 +158,9 @@ export class FileTableComponent implements OnInit, OnDestroy {
     event: MouseEvent,
     menu: FileTableMenuComponent,
   ): void {
-    if (!item.checked) {
-      this.setAllItemsCheckedStatus(false);
-    }
+    if (!item.checked) this.tableChecked = false;
+
     menu.open(event);
-  }
-
-  getAllItemsCheckedStatus(): boolean | null {
-    return !this.itemsChecked.size
-      ? false
-      : this.itemsChecked.size == this.items.length
-      ? true
-      : null;
-  }
-
-  setAllItemsCheckedStatus(checked: boolean): void {
-    if (checked) this.items.forEach((item) => this.itemsChecked.add(item));
-    else this.itemsChecked.clear();
   }
 
   private updateQuery(): void {
