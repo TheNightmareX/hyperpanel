@@ -69,7 +69,7 @@ export class FileTableComponent implements OnInit, OnDestroy {
     this.navigator.path$.subscribe((path) => {
       this.path = path;
       this.page = 1;
-      this.updateQuery();
+      this.handleQueryParamChange();
     });
   }
 
@@ -77,15 +77,40 @@ export class FileTableComponent implements OnInit, OnDestroy {
     this.subscription?.unsubscribe();
   }
 
-  handlePageChange(value: number): void {
-    this.page = value;
-    this.updateQuery();
-  }
+  handleQueryParamChange(): void {
+    if (this.loading) return;
 
-  handleSizeChange(value: number): void {
-    this.size = value;
-    this.page = 1;
-    this.updateQuery();
+    const offset = (this.page - 1) * this.size;
+
+    this.loading = true;
+    this.subscription?.unsubscribe();
+    this.subscription = this.fileInfoListGql
+      .watch({
+        path: this.path,
+        offset,
+        limit: this.size,
+      })
+      .valueChanges.subscribe({
+        next: (result) => {
+          this.loading = false;
+          this.itemsChecked.clear();
+          this.tableDataIndexLastClicked = 0;
+          const { total, items } = result.data.fileInfoList;
+          this.total = total;
+          this.items = items
+            .filter(
+              (item): item is FileInfoListItemFragment =>
+                !!(item as FileInfoListItemFragment).id,
+            )
+            .map((item) => this.parseItem(item));
+        },
+        error: (err) => {
+          this.loading = false;
+          this.messageService.error(`Query files failed: ${err.message}`);
+          if (this.navigator.canBackward) this.navigator.backward();
+          else this.navigator.navigate('/');
+        },
+      });
   }
 
   /**
@@ -139,42 +164,6 @@ export class FileTableComponent implements OnInit, OnDestroy {
     if (!item.checked) this.tableChecked = false;
 
     menu.open(event);
-  }
-
-  private updateQuery(): void {
-    if (this.loading) return;
-
-    const offset = (this.page - 1) * this.size;
-
-    this.loading = true;
-    this.subscription?.unsubscribe();
-    this.subscription = this.fileInfoListGql
-      .watch({
-        path: this.path,
-        offset,
-        limit: this.size,
-      })
-      .valueChanges.subscribe({
-        next: (result) => {
-          this.loading = false;
-          this.itemsChecked.clear();
-          this.tableDataIndexLastClicked = 0;
-          const { total, items } = result.data.fileInfoList;
-          this.total = total;
-          this.items = items
-            .filter(
-              (item): item is FileInfoListItemFragment =>
-                !!(item as FileInfoListItemFragment).id,
-            )
-            .map((item) => this.parseItem(item));
-        },
-        error: (err) => {
-          this.loading = false;
-          this.messageService.error(`Query files failed: ${err.message}`);
-          if (this.navigator.canBackward) this.navigator.backward();
-          else this.navigator.navigate('/');
-        },
-      });
   }
 
   private parseItem(raw: FileInfoListItemFragment): FileTableItem {

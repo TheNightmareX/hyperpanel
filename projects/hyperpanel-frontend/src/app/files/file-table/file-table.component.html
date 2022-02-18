@@ -55,11 +55,11 @@
       nzShowSizeChanger
       [nzPageSizeOptions]="[50, 100, 200, 500, 1000, 2000]"
       nzShowQuickJumper
-      [nzPageIndex]="page"
-      [nzPageSize]="size"
+      [(nzPageIndex)]="page"
+      [(nzPageSize)]="size"
       [nzTotal]="total"
-      (nzPageIndexChange)="handlePageChange($event)"
-      (nzPageSizeChange)="handleSizeChange($event)"
+      (nzPageIndexChange)="handleQueryParamChange()"
+      (nzPageSizeChange)="handleQueryParamChange()"
       [nzDisabled]="loading"
     ></nz-pagination>
   </div>
