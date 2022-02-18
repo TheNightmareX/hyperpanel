@@ -32,7 +32,7 @@
         *ngFor="let item of table.data; trackBy: tracker; let i = index"
         (click)="handleItemClick(i, item, table.data, $event)"
         (dblclick)="openItem(item)"
-        (contextmenu)="openMenu(item, $event, menu)"
+        (contextmenu)="!item.checked ? checkNone() : null; menu.open($event)"
       >
         <td [(nzChecked)]="item.checked"></td>
         <td>

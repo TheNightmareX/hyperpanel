@@ -8,7 +8,6 @@ import {
   FileType,
 } from 'src/app/graphql';
 
-import { FileTableMenuComponent } from '../file-table-menu/file-table-menu.component';
 import { FileTableNavigator } from './file-table-navigator.service';
 import { FileTableSorter } from './file-table-sorter.service';
 
@@ -145,15 +144,6 @@ export class FileTableComponent implements OnInit, OnDestroy {
 
   openItem(item: FileTableItem): void {
     if (item.type == FileType.Directory) this.navigator.navigate(item.path);
-  }
-
-  openMenu(
-    item: FileTableItem,
-    event: MouseEvent,
-    menu: FileTableMenuComponent,
-  ): void {
-    if (!item.checked) this.checkNone();
-    menu.open(event);
   }
 
   private parseItem(raw: FileInfoListItemFragment): FileTableItem {
