@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit, TrackByFunction } from '@angular/core';
-import { QueryRef } from 'apollo-angular';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzTableSortFn } from 'ng-zorro-antd/table';
 import { Subscription } from 'rxjs';
@@ -7,8 +6,6 @@ import { defineAccessor } from 'src/app/common/utilities';
 import {
   FileInfoListGQL,
   FileInfoListItemFragment,
-  FileInfoListQuery,
-  FileInfoListQueryVariables,
   FileType,
 } from 'src/app/graphql';
 
@@ -69,11 +66,7 @@ export class FileTableComponent implements OnInit, OnDestroy {
 
   private tableDataIndexLastClicked = 0;
 
-  private fileInfoListQuery?: QueryRef<
-    FileInfoListQuery,
-    FileInfoListQueryVariables
-  >;
-  private fileInfoListSubscription?: Subscription;
+  private subscription?: Subscription;
 
   constructor(
     private messageService: NzMessageService,
@@ -90,7 +83,7 @@ export class FileTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.fileInfoListSubscription?.unsubscribe();
+    this.subscription?.unsubscribe();
   }
 
   handlePageChange(value: number): void {
@@ -161,16 +154,16 @@ export class FileTableComponent implements OnInit, OnDestroy {
     if (this.loading) return;
 
     const offset = (this.page - 1) * this.size;
-    this.fileInfoListQuery = this.fileInfoListGql.watch({
-      path: this.path,
-      offset,
-      limit: this.size,
-    });
 
     this.loading = true;
-    this.fileInfoListSubscription?.unsubscribe();
-    this.fileInfoListSubscription =
-      this.fileInfoListQuery.valueChanges.subscribe({
+    this.subscription?.unsubscribe();
+    this.subscription = this.fileInfoListGql
+      .watch({
+        path: this.path,
+        offset,
+        limit: this.size,
+      })
+      .valueChanges.subscribe({
         next: (result) => {
           this.loading = false;
           this.itemsChecked.clear();
