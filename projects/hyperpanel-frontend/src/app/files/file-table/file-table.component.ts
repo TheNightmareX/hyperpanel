@@ -194,15 +194,7 @@ export class FileTableComponent implements OnInit, OnDestroy {
               (item): item is FileInfoListItemFragment =>
                 !!(item as FileInfoListItemFragment).id,
             )
-            .map((item) => ({
-              ...item,
-              icon:
-                item.type == FileType.Directory ? 'folder-open' : 'file-text',
-              modifiedAt: new Date(item.modifiedAt),
-              typeFinalized: item.type == FileType.Directory ? null : item.type,
-              sizeFinalized:
-                item.type == FileType.Directory ? null : item.sizeFormatted,
-            }));
+            .map((item) => this.parseItem(item));
         },
         error: (err) => {
           this.loading = false;
@@ -229,5 +221,16 @@ export class FileTableComponent implements OnInit, OnDestroy {
           ? 1
           : base(a, b)
         : base(a, b);
+  }
+
+  private parseItem(item: FileInfoListItemFragment): FileTableItem {
+    return {
+      ...item,
+      icon: item.type == FileType.Directory ? 'folder-open' : 'file-text',
+      modifiedAt: new Date(item.modifiedAt),
+      typeFinalized: item.type == FileType.Directory ? null : item.type,
+      sizeFinalized:
+        item.type == FileType.Directory ? null : item.sizeFormatted,
+    };
   }
 }
