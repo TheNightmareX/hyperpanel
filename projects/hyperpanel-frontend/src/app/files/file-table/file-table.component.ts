@@ -20,22 +20,11 @@ import {
 import { FileTableMenuComponent } from '../file-table-menu/file-table-menu.component';
 import { FileTableNavigator } from './file-table-navigator.service';
 
-export class FileTableItem {
-  id: string;
+export interface FileTableItem extends FileInfoListItemFragment {
   icon: string;
-  name: string;
   modifiedAt: Date;
-  type: string | null;
-  size: string | null;
-
-  constructor(public origin: FileInfoListItemFragment) {
-    this.id = origin.id;
-    this.icon = origin.type == FileType.Directory ? 'folder-open' : 'file-text';
-    this.name = origin.name;
-    this.modifiedAt = new Date(origin.modifiedAt);
-    this.type = origin.type == FileType.Directory ? null : origin.type;
-    this.size = origin.type == FileType.Directory ? null : origin.sizeFormatted;
-  }
+  typeFinalized: string | null;
+  sizeFinalized: string | null;
 }
 
 type FileTableItemEntry = [number, FileTableItem];
@@ -61,17 +50,11 @@ export class FileTableComponent implements OnInit, OnDestroy {
   sorters: NzTableSortFn<FileTableItem>[] = [
     this.getSorter((a, b) => (a.name > b.name ? 1 : a.name < b.name ? -1 : 0)),
     this.getSorter((a, b) => a.modifiedAt.getTime() - b.modifiedAt.getTime()),
-    this.getSorter((a, b) =>
-      a.origin.type > b.origin.type
-        ? 1
-        : a.origin.type < b.origin.type
-        ? -1
-        : 0,
-    ),
+    this.getSorter((a, b) => (a.type > b.type ? 1 : a.type < b.type ? -1 : 0)),
     this.getSorter(
       (a, b) =>
-        (a.origin.type == FileType.File ? a.origin.size : 0) -
-        (b.origin.type == FileType.File ? b.origin.size : 0),
+        (a.type == FileType.File ? a.size : 0) -
+        (b.type == FileType.File ? b.size : 0),
     ),
   ];
 
@@ -150,8 +133,7 @@ export class FileTableComponent implements OnInit, OnDestroy {
   }
 
   openItem(item: FileTableItem): void {
-    if (item.type == FileType.Directory)
-      this.navigator.navigate(item.origin.path);
+    if (item.type == FileType.Directory) this.navigator.navigate(item.path);
   }
 
   openMenu(
@@ -212,7 +194,15 @@ export class FileTableComponent implements OnInit, OnDestroy {
               (item): item is FileInfoListItemFragment =>
                 !!(item as FileInfoListItemFragment).id,
             )
-            .map((item) => new FileTableItem(item));
+            .map((item) => ({
+              ...item,
+              icon:
+                item.type == FileType.Directory ? 'folder-open' : 'file-text',
+              modifiedAt: new Date(item.modifiedAt),
+              typeFinalized: item.type == FileType.Directory ? null : item.type,
+              sizeFinalized:
+                item.type == FileType.Directory ? null : item.sizeFormatted,
+            }));
         },
         error: (err) => {
           this.loading = false;
