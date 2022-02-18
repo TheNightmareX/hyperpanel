@@ -33,8 +33,13 @@ export class FileTableComponent implements OnInit, OnDestroy {
 
   items: FileTableItem[] = [];
   itemsChecked = new Set<FileTableItem>();
+  private itemIndexLastClicked = 0;
   total?: number;
   loading = false;
+
+  tracker: TrackByFunction<FileTableItem> = (...[, item]): string => item.id;
+
+  private subscription?: Subscription;
 
   get tableChecked(): boolean {
     return (
@@ -52,15 +57,9 @@ export class FileTableComponent implements OnInit, OnDestroy {
     );
   }
 
-  tracker: TrackByFunction<FileTableItem> = (...[, item]): string => item.id;
-
-  private tableDataIndexLastClicked = 0;
-
-  private subscription?: Subscription;
-
   constructor(
     public sorter: FileTableSorter,
-    private messageService: NzMessageService,
+    private notifier: NzMessageService,
     private navigator: FileTableNavigator,
     private fileInfoListGql: FileInfoListGQL,
   ) {}
@@ -94,7 +93,7 @@ export class FileTableComponent implements OnInit, OnDestroy {
         next: (result) => {
           this.loading = false;
           this.itemsChecked.clear();
-          this.tableDataIndexLastClicked = 0;
+          this.itemIndexLastClicked = 0;
           const { total, items } = result.data.fileInfoList;
           this.total = total;
           this.items = items
@@ -106,7 +105,7 @@ export class FileTableComponent implements OnInit, OnDestroy {
         },
         error: (err) => {
           this.loading = false;
-          this.messageService.error(`Query files failed: ${err.message}`);
+          this.notifier.error(`Query files failed: ${err.message}`);
           if (this.navigator.canBackward) this.navigator.backward();
           else this.navigator.navigate('/');
         },
@@ -136,7 +135,7 @@ export class FileTableComponent implements OnInit, OnDestroy {
     // TODO: optimize implementation
     if (shift) {
       if (!ctrl) this.tableChecked = false;
-      const indexLast = this.tableDataIndexLastClicked;
+      const indexLast = this.itemIndexLastClicked;
       const itemsCovered = items.slice(
         ...(indexLast < index
           ? [indexLast, index + 1]
@@ -149,7 +148,7 @@ export class FileTableComponent implements OnInit, OnDestroy {
       this.tableChecked = false;
       item.checked = true;
     }
-    this.tableDataIndexLastClicked = index;
+    this.itemIndexLastClicked = index;
   }
 
   openItem(item: FileTableItem): void {
