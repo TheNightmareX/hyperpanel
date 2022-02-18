@@ -32,10 +32,7 @@
         (dblclick)="openItem(entry[1])"
         (contextmenu)="openMenu(entry[1], $event, menu)"
       >
-        <td
-          [nzChecked]="getItemCheckedStatus(entry[1])"
-          (nzCheckedChange)="setItemCheckedStatus(entry[1], $event)"
-        ></td>
+        <td [(nzChecked)]="entry[1].checked"></td>
         <td>
           <i nz-icon [nzType]="entry[1].icon"></i>
           <span>{{ entry[1].name }}</span>

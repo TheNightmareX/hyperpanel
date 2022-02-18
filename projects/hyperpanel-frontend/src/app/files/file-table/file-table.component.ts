@@ -9,6 +9,7 @@ import { QueryRef } from 'apollo-angular';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzTableComponent, NzTableSortFn } from 'ng-zorro-antd/table';
 import { Subscription } from 'rxjs';
+import { defineAccessor } from 'src/app/common/utilities';
 import {
   FileInfoListGQL,
   FileInfoListItemFragment,
@@ -25,6 +26,7 @@ export interface FileTableItem extends FileInfoListItemFragment {
   modifiedAt: Date;
   typeFinalized: string | null;
   sizeFinalized: string | null;
+  checked: boolean;
 }
 
 type FileTableItemEntry = [number, FileTableItem];
@@ -121,13 +123,12 @@ export class FileTableComponent implements OnInit, OnDestroy {
           ? [indexLast, index + 1]
           : [index, indexLast + 1]),
       );
-      itemsCovered.forEach((item) => this.setItemCheckedStatus(item, true));
+      itemsCovered.forEach((item) => (item.checked = true));
     } else if (ctrl) {
-      const checked = this.getItemCheckedStatus(item);
-      this.setItemCheckedStatus(item, !checked);
+      item.checked = !item.checked;
     } else {
       this.setAllItemsCheckedStatus(false);
-      this.setItemCheckedStatus(item, true);
+      item.checked = true;
     }
     this.tableDataIndexLastClicked = index;
   }
@@ -141,19 +142,10 @@ export class FileTableComponent implements OnInit, OnDestroy {
     event: MouseEvent,
     menu: FileTableMenuComponent,
   ): void {
-    if (!this.getItemCheckedStatus(item)) {
+    if (!item.checked) {
       this.setAllItemsCheckedStatus(false);
     }
     menu.open(event);
-  }
-
-  getItemCheckedStatus(item: FileTableItem): boolean {
-    return this.itemsChecked.has(item);
-  }
-
-  setItemCheckedStatus(item: FileTableItem, checked: boolean): void {
-    if (checked) this.itemsChecked.add(item);
-    else this.itemsChecked.delete(item);
   }
 
   getAllItemsCheckedStatus(): boolean | null {
@@ -223,14 +215,20 @@ export class FileTableComponent implements OnInit, OnDestroy {
         : base(a, b);
   }
 
-  private parseItem(item: FileInfoListItemFragment): FileTableItem {
-    return {
-      ...item,
-      icon: item.type == FileType.Directory ? 'folder-open' : 'file-text',
-      modifiedAt: new Date(item.modifiedAt),
-      typeFinalized: item.type == FileType.Directory ? null : item.type,
-      sizeFinalized:
-        item.type == FileType.Directory ? null : item.sizeFormatted,
+  private parseItem(raw: FileInfoListItemFragment): FileTableItem {
+    const item: FileTableItem = {
+      ...raw,
+      icon: raw.type == FileType.Directory ? 'folder-open' : 'file-text',
+      modifiedAt: new Date(raw.modifiedAt),
+      typeFinalized: raw.type == FileType.Directory ? null : raw.type,
+      sizeFinalized: raw.type == FileType.Directory ? null : raw.sizeFormatted,
+      checked: null as any,
     };
+    defineAccessor(item, 'checked', {
+      get: () => this.itemsChecked.has(item),
+      set: (v) =>
+        v ? this.itemsChecked.add(item) : this.itemsChecked.delete(item),
+    });
+    return item;
   }
 }
