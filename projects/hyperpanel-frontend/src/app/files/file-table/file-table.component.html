@@ -21,10 +21,10 @@
           "
           (nzCheckedChange)="$event ? checkAll() : checkNone()"
         ></th>
-        <th [nzSortFn]="sorter.for('name')" nzSortOrder="ascend">Name</th>
-        <th [nzSortFn]="sorter.for('modifiedAt')">Modified At</th>
-        <th [nzSortFn]="sorter.for('type')">Type</th>
-        <th [nzSortFn]="sorter.for('size')">Size</th>
+        <th [nzSortFn]="sorter.resolve('name')" nzSortOrder="ascend">Name</th>
+        <th [nzSortFn]="sorter.resolve('modifiedAt')">Modified At</th>
+        <th [nzSortFn]="sorter.resolve('type')">Type</th>
+        <th [nzSortFn]="sorter.resolve('size')">Size</th>
       </tr>
     </thead>
     <tbody>

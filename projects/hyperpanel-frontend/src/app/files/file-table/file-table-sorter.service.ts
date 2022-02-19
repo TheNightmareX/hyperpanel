@@ -33,7 +33,7 @@ export class FileTableSorter {
     );
   }
 
-  for(field: Field): Comparer {
+  resolve(field: Field): Comparer {
     const result = this.storage.get(field);
     if (!result) throw new Error();
     return result;
