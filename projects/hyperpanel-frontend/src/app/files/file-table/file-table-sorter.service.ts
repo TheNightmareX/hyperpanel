@@ -12,25 +12,27 @@ export class FileTableSorter {
   private storage = new Map<Field, Comparer>();
 
   constructor() {
-    this.register('name', (a, b) =>
-      a.name > b.name ? 1 : a.name < b.name ? -1 : 0,
-    );
+    this.register({
+      field: 'name',
+      comparer: (a, b) => (a.name > b.name ? 1 : a.name < b.name ? -1 : 0),
+    });
 
-    this.register(
-      'modifiedAt',
-      (a, b) => a.modifiedAt.getTime() - b.modifiedAt.getTime(),
-    );
+    this.register({
+      field: 'modifiedAt',
+      comparer: (a, b) => a.modifiedAt.getTime() - b.modifiedAt.getTime(),
+    });
 
-    this.register('type', (a, b) =>
-      a.type > b.type ? 1 : a.type < b.type ? -1 : 0,
-    );
+    this.register({
+      field: 'type',
+      comparer: (a, b) => (a.type > b.type ? 1 : a.type < b.type ? -1 : 0),
+    });
 
-    this.register(
-      'size',
-      (a, b) =>
+    this.register({
+      field: 'size',
+      comparer: (a, b) =>
         (a.type == FileType.File ? a.size : 0) -
         (b.type == FileType.File ? b.size : 0),
-    );
+    });
   }
 
   resolve(field: Field): Comparer {
@@ -39,7 +41,13 @@ export class FileTableSorter {
     return result;
   }
 
-  private register(field: Field, comparer: Comparer): void {
+  private register({
+    field,
+    comparer,
+  }: {
+    field: Field;
+    comparer: Comparer;
+  }): void {
     const comparerWrapped: Comparer = (a, b) =>
       a.type != b.type
         ? a.type == FileType.Directory
