@@ -11,11 +11,16 @@ import {
 import { FileTableNavigator } from './file-table-navigator.service';
 import { FileTableSorter } from './file-table-sorter.service';
 
-export interface FileTableItem extends FileInfoListItemFragment {
+export interface FileTableItem {
+  raw?: FileInfoListItemFragment;
+  id: string;
   icon: string;
-  modifiedAt: Date;
-  typeFinalized: string | null;
+  name: string;
+  type: FileType;
+  typeFinalized: FileType | null;
+  size: number;
   sizeFinalized: string | null;
+  modifiedAt: Date;
   checked: boolean;
 }
 
@@ -143,16 +148,21 @@ export class FileTableComponent implements OnInit, OnDestroy {
   }
 
   openItem(item: FileTableItem): void {
-    if (item.type == FileType.Directory) this.navigator.navigate(item.path);
+    if (!item.raw) return;
+    if (item.type == FileType.Directory) this.navigator.navigate(item.raw.path);
   }
 
   private parseItem(raw: FileInfoListItemFragment): FileTableItem {
     const item: FileTableItem = {
-      ...raw,
+      raw,
+      id: raw.id,
+      name: raw.name,
       icon: raw.type == FileType.Directory ? 'folder-open' : 'file-text',
-      modifiedAt: new Date(raw.modifiedAt),
-      typeFinalized: raw.type == FileType.Directory ? null : raw.type,
+      size: raw.size,
       sizeFinalized: raw.type == FileType.Directory ? null : raw.sizeFormatted,
+      type: raw.type,
+      typeFinalized: raw.type == FileType.Directory ? null : raw.type,
+      modifiedAt: new Date(raw.modifiedAt),
       checked: null as any,
     };
     defineAccessor(item, 'checked', {
