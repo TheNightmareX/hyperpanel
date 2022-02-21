@@ -7,7 +7,7 @@ import {
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { deferTime } from '../common/deferTime.operator';
+import { deferTime } from '../common/defer-time.operator';
 
 /**
  * @deprecated Temporary deprecated.
